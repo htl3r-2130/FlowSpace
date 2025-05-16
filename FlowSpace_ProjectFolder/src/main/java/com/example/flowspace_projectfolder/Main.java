@@ -1,74 +1,87 @@
 package com.example.flowspace_projectfolder;
 
 import javafx.application.Application;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 
 public class Main extends Application {
+
     @Override
     public void start(Stage stage) {
-        stage.setTitle("Flowspace");
-        stage.setMaximized(true);
+        stage.setTitle("Flowspace - Login");
         stage.getIcons().add(new Image("file:resources/icon.png"));
+        stage.setWidth(500);
+        stage.setHeight(500);
         stage.centerOnScreen();
 
-        BorderPane root = new BorderPane();
+        VBox root = new VBox(15);
+        root.setAlignment(Pos.CENTER);
+        root.setStyle("-fx-background-color: #eef2ff;");
+        root.setPadding(new Insets(40));
 
-        HBox topBar = new HBox();
-        TextField searchField = new TextField();
-        Button searchButton = new Button("Search");
-        Region spacer = new Region();
-        HBox.setHgrow(spacer, Priority.ALWAYS);
+        ImageView logo = new ImageView(new Image("file:resources/icon.png"));
+        logo.setFitWidth(100);
+        logo.setPreserveRatio(true);
 
-        Button darkModeBtn = new Button("Darkmode");
-        Button settingsBtn = new Button("Settings");
-        Button profileBtn = new Button("Profile");
+        Label userLabel = new Label("Benutzername:");
+        TextField usernameField = new TextField();
+        usernameField.setPromptText("Benutzername");
 
-        topBar.getChildren().addAll(searchField, searchButton, spacer, darkModeBtn, settingsBtn, profileBtn);
-        root.setTop(topBar);
+        Label pwLabel = new Label("Passwort:");
+        PasswordField passwordField = new PasswordField();
+        passwordField.setPromptText("Passwort");
 
-        VBox calendarBox = new VBox();
-        Label calendarLabel = new Label("Calendar");
+        Label statusLabel = new Label();
+        statusLabel.setStyle("-fx-text-fill: red;");
 
-        GridPane calendarGrid = new GridPane();
-        calendarGrid.setHgap(10);
-        calendarGrid.setVgap(10);
+        Button loginButton = new Button("Login");
+        loginButton.setDefaultButton(true);
 
-        for (int row = 0; row < 5; row++) {
-            for (int col = 0; col < 7; col++) {
-                Region dayCell = new Region();
-                dayCell.setPrefSize(100, 100);
-                dayCell.setStyle("-fx-background-color: #d0ddff;");
-                calendarGrid.add(dayCell, col, row);
+        Button signupButton = new Button("Noch kein Konto? Registrieren");
+
+        loginButton.setOnAction(e -> {
+            String user = usernameField.getText();
+            String pw = passwordField.getText();
+            if (!user.isEmpty() && !pw.isEmpty()) {
+                boolean success = NetworkManager.login(user, pw);
+                if (success) {
+                    CalenderView calenderView = new CalenderView();
+                    try {
+                        calenderView.start(new Stage());
+                        stage.close();
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                } else {
+                    statusLabel.setText("Login fehlgeschlagen");
+                }
+            } else {
+                statusLabel.setText("Bitte Benutzername und Passwort eingeben.");
             }
-        }
+        });
 
-        calendarBox.getChildren().addAll(calendarLabel, calendarGrid);
-        root.setCenter(calendarBox);
+        signupButton.setOnAction(e -> {
+            // TODO: Registrierungsszene öffnen
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Registrierung");
+            alert.setHeaderText("TODO");
+            alert.showAndWait();
+        });
 
+        VBox formBox = new VBox(10);
+        formBox.setAlignment(Pos.CENTER_LEFT);
+        formBox.setMaxWidth(300);
+        HBox validationBox = new HBox(10);
+        validationBox.getChildren().addAll(signupButton, loginButton);
+        formBox.getChildren().addAll(userLabel, usernameField, pwLabel, passwordField, validationBox, statusLabel);
 
-        VBox friendsPanel = new VBox();
-
-        for (int i = 0; i < 3; i++) {
-            HBox friendEntry = new HBox();
-            Circle avatar = new Circle(10, Color.LIGHTBLUE);
-            Label name = new Label("Name");
-            Button chatBtn = new Button("Chat");
-
-            friendEntry.setSpacing(10);
-            friendEntry.getChildren().addAll(avatar, name, chatBtn);
-            friendsPanel.getChildren().add(friendEntry);
-        }
-
-        root.setRight(friendsPanel);
-
+        root.getChildren().addAll(logo, formBox);
         Scene scene = new Scene(root);
         stage.setScene(scene);
         stage.show();
