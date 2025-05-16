@@ -43,32 +43,33 @@ public class Main {
     }
 
     private static void handleClient(Socket socket) {
-        try (
-                BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-                PrintWriter out = new PrintWriter(socket.getOutputStream(), true)
-        ) {
-            String request = in.readLine();
-            if (request != null && request.startsWith("login|")) {
-                String[] parts = request.split("\\|", 3);
-                if (parts.length == 3) {
-                    String username = parts[1];
-                    String password = parts[2];
+        try {
+            BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
 
-                    System.out.println("- Login attempt from '" + username + "'");
+            String line;
+            while ((line = in.readLine()) != null) {
+                if (line.startsWith("login|")) {
+                    String[] parts = line.split("\\|", 3);
+                    if (parts.length == 3) {
+                        String username = parts[1];
+                        String password = parts[2];
 
-                    String storedPassword = users.get(username);
-                    if (storedPassword != null && storedPassword.equals(password)) {
-                        System.out.println("  -> Login successful for '" + username + "'");
-                        out.println("OK");
+                        System.out.println("- Login attempt from '" + username + "'");
+
+                        String storedPassword = users.get(username);
+                        if (storedPassword != null && storedPassword.equals(password)) {
+                            System.out.println("  -> Login successful for '" + username + "'");
+                            out.println("OK");
+                        } else {
+                            System.out.println("  -> Login failed for '" + username + "'");
+                            out.println("ERROR");
+                        }
                     } else {
-                        System.out.println("  -> Login failed for '" + username + "'");
                         out.println("ERROR");
                     }
-                } else {
-                    out.println("ERROR");
                 }
-            } else {
-                out.println("ERROR");
+
             }
         } catch (IOException e) {
             System.err.println("Client error: " + e.getMessage());

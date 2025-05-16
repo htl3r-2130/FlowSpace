@@ -48,11 +48,17 @@ public class Main extends Application {
         loginButton.setOnAction(e -> {
             String user = usernameField.getText();
             String pw = passwordField.getText();
+
             if (!user.isEmpty() && !pw.isEmpty()) {
+                boolean connected = NetworkManager.connect();
+                if (!connected) {
+                    statusLabel.setText("Verbindung zum Server fehlgeschlagen.");
+                    return;
+                }
                 boolean success = NetworkManager.login(user, pw);
                 if (success) {
-                    CalenderView calenderView = new CalenderView();
                     try {
+                        CalenderView calenderView = new CalenderView();
                         calenderView.start(new Stage());
                         stage.close();
                     } catch (Exception ex) {
@@ -67,7 +73,6 @@ public class Main extends Application {
         });
 
         signupButton.setOnAction(e -> {
-            // TODO: Registrierungsszene öffnen
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Registrierung");
             alert.setHeaderText("TODO");
