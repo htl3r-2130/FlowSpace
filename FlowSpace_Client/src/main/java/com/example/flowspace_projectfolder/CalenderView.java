@@ -73,17 +73,9 @@ public class CalenderView extends Application {
                 StackPane.setAlignment(dayLabel, Pos.TOP_RIGHT);
                 dayLabel.setPadding(new Insets(5));
                 //check if day is today & stack
-                StackPane cellStack;
-                if (day == LocalDate.now().getDayOfMonth()) {
-                    Circle redCircle = new Circle(12);
-                    redCircle.setFill(Color.grayRgb(200));
-                    StackPane.setAlignment(redCircle, Pos.TOP_RIGHT);
-                    cellStack = new StackPane(dayCell, redCircle, dayLabel);
-                } else {
-                     cellStack = new StackPane(dayCell, dayLabel);
-                }
-
-                calendarGrid.add(cellStack, col, row);
+                boolean isToday = (day == LocalDate.now().getDayOfMonth());
+                CalendarDayCell cell = new CalendarDayCell(day, isToday);
+                calendarGrid.add(cell, col, row);
                 dayOffset++;
             }
         }
