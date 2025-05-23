@@ -12,6 +12,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 
 public class CalenderView extends Application {
@@ -54,7 +56,6 @@ public class CalenderView extends Application {
                 .with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY))
                 .getDayOfMonth();
         int dayOffset = 0;
-        boolean wrap = false;
         for (int row = 0; row < 4; row++) {
             for (int col = 0; col < 7; col++) {
                 //day logic for calendar
@@ -71,10 +72,18 @@ public class CalenderView extends Application {
                 dayLabel.setTextFill(javafx.scene.paint.Color.GRAY);
                 StackPane.setAlignment(dayLabel, Pos.TOP_RIGHT);
                 dayLabel.setPadding(new Insets(5));
-                //stack region and day label
-                StackPane cellWithLabel = new StackPane(dayCell, dayLabel);
+                //check if day is today & stack
+                StackPane cellStack;
+                if (day == LocalDate.now().getDayOfMonth()) {
+                    Circle redCircle = new Circle(12);
+                    redCircle.setFill(Color.grayRgb(200));
+                    StackPane.setAlignment(redCircle, Pos.TOP_RIGHT);
+                    cellStack = new StackPane(dayCell, redCircle, dayLabel);
+                } else {
+                     cellStack = new StackPane(dayCell, dayLabel);
+                }
 
-                calendarGrid.add(cellWithLabel, col, row);
+                calendarGrid.add(cellStack, col, row);
                 dayOffset++;
             }
         }
