@@ -72,7 +72,6 @@ public class CalenderView extends Application {
         VBox.setMargin(monthLabel, new Insets(10, 0, 10, 0));
 
 // Kalender-Box mit Monatsname und Kalender-Grid füllen
-        calendarBox.getChildren().addAll(monthLabel, calendarLabel, calendarGrid);
         int dayOffset = 0;
         for (int row = 0; row < 4; row++) {
             for (int col = 0; col < 7; col++) {
@@ -98,7 +97,7 @@ public class CalenderView extends Application {
             }
         }
 
-        calendarBox.getChildren().addAll(calendarLabel, calendarGrid);
+        calendarBox.getChildren().addAll(monthLabel, calendarLabel, calendarGrid);
         root.setCenter(calendarBox);
 
         Scene scene = new Scene(root);
