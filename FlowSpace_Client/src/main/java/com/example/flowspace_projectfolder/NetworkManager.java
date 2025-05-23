@@ -31,7 +31,7 @@ public class NetworkManager {
         try {
             out.println("login|" + username + "|" + password);
             String response = in.readLine();
-            return "OK".equalsIgnoreCase(response); //TODO: wieso equalsIgnorecase?
+            return "OK".equalsIgnoreCase(response);
         } catch (IOException e) {
             return false;
         }
@@ -41,5 +41,12 @@ public class NetworkManager {
         try {
             if (socket != null) socket.close();
         } catch (IOException ignored) {}
+    }
+    public static void sendTask(String taskText) {
+        if (out != null) {
+            out.println("New Task: " + taskText);
+        } else {
+            System.err.println("Nicht mit dem Server verbunden.");
+        }
     }
 }

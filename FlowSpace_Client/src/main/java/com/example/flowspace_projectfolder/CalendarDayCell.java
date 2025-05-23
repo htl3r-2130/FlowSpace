@@ -11,6 +11,8 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.example.flowspace_projectfolder.CalenderView.months;
+
 public class CalendarDayCell extends StackPane {
     private final int day;
     private final List<String> entries = new ArrayList<>();
@@ -47,7 +49,7 @@ public class CalendarDayCell extends StackPane {
     private void promptNewEntry() {
         TextInputDialog dialog = new TextInputDialog();
         dialog.setTitle("Neuer Eintrag");
-        dialog.setHeaderText("Text für den Tag " + day + " eingeben:");
+        dialog.setHeaderText("Task für den " + day + ". "+ months[month] + " eingeben:");
         dialog.setContentText("Eintrag:");
 
         dialog.showAndWait().ifPresent(this::addEntry);
@@ -59,11 +61,9 @@ public class CalendarDayCell extends StackPane {
         Label entryLabel = new Label(displayText);
         entryLabel.setTooltip(new Tooltip(text));
         entryBox.getChildren().add(entryLabel);
-        //print out what text is where
-        System.out.println("Neuer Task: "+ text +", " + day + "." + month +"."+ LocalDate.now().getYear());
-    }
-
-    public List<String> getEntries() {
-        return entries;
+        //print out new task on day
+        String taskText = text + ", " + day + "." + month + "." + LocalDate.now().getYear();
+        System.out.println("Neuer Task: " + taskText);
+        NetworkManager.sendTask(taskText);
     }
 }

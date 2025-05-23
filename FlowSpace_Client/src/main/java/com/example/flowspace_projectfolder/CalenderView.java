@@ -18,7 +18,7 @@ import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 
 public class CalenderView extends Application {
-    String[] months = new String[]{"",
+    public static final String[] months = new String[]{"",
             "January", "February", "March", "April", "May", "June",
             "July", "August", "September", "October", "November", "December"
     };
