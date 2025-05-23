@@ -15,9 +15,10 @@ public class CalendarDayCell extends StackPane {
     private final int day;
     private final List<String> entries = new ArrayList<>();
     private final VBox entryBox = new VBox();
-
-    public CalendarDayCell(int day, boolean isToday) {
+    private final int month;
+    public CalendarDayCell(int day,int month, boolean isToday) {
         this.day = day;
+        this.month = month;
 
         Region background = new Region();
         background.setPrefSize(100, 100);
@@ -59,8 +60,7 @@ public class CalendarDayCell extends StackPane {
         entryLabel.setTooltip(new Tooltip(text));
         entryBox.getChildren().add(entryLabel);
         //print out what text is where
-        System.out.println(text + day + LocalDate.now().getMonth());
-
+        System.out.println("Neuer Task: "+ text +", " + day + "." + month +"."+ LocalDate.now().getYear());
     }
 
     public List<String> getEntries() {

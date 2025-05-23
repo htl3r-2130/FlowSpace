@@ -1,4 +1,5 @@
 package com.example.flowspace_projectfolder;
+
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.temporal.TemporalAdjusters;
@@ -21,6 +22,7 @@ public class CalenderView extends Application {
             "January", "February", "March", "April", "May", "June",
             "July", "August", "September", "October", "November", "December"
     };
+
     @Override
     public void start(Stage stage) {
         stage.setTitle("Flowspace");
@@ -52,7 +54,7 @@ public class CalenderView extends Application {
         calendarGrid.setVgap(10);
         calendarGrid.setAlignment(Pos.CENTER);
 
-    //calendar and functionality
+        //calendar and functionality
         //length of currentMonth
         int curMonthLength = LocalDate.now().lengthOfMonth();
         //first bracket (monday of this week)
@@ -64,34 +66,35 @@ public class CalenderView extends Application {
         int currentMonth = LocalDate.now().getMonthValue();
         String currentMonthName = months[currentMonth];
 
-// Label für den Monatsnamen erstellen
+        // Label für den Monatsnamen erstellen
         Label monthLabel = new Label(currentMonthName);
         monthLabel.setStyle("-fx-font-size: 24px; -fx-font-weight: bold;");
         monthLabel.setAlignment(Pos.CENTER);
         monthLabel.setMaxWidth(Double.MAX_VALUE);
         VBox.setMargin(monthLabel, new Insets(10, 0, 10, 0));
 
-// Kalender-Box mit Monatsname und Kalender-Grid füllen
+        // Kalender-Box mit Monatsname und Kalender-Grid füllen
         int dayOffset = 0;
         for (int row = 0; row < 4; row++) {
             for (int col = 0; col < 7; col++) {
-                //day logic for calendar
+                // day logic for calendar
                 int day = firstMonday + dayOffset;
+                int displayMonth = LocalDate.now().getMonthValue(); // aktueller Monat
+
                 if (day > curMonthLength) {
                     day = day - curMonthLength;
+                    displayMonth++; // nächster Monat
+                    if (displayMonth > 12) displayMonth = 1;
                 }
-                //create region for day
-                Region dayCell = new Region();
-                dayCell.setPrefSize(100, 100);
-                dayCell.setStyle("-fx-background-color: #d0ddff;");
-                //create date-label for day
-                Label dayLabel = new Label(String.valueOf(day));
-                dayLabel.setTextFill(javafx.scene.paint.Color.GRAY);
-                StackPane.setAlignment(dayLabel, Pos.TOP_RIGHT);
-                dayLabel.setPadding(new Insets(5));
-                //check if day is today & stack
-                boolean isToday = (day == LocalDate.now().getDayOfMonth());
-                CalendarDayCell cell = new CalendarDayCell(day, isToday);
+
+                // check if it's today
+                boolean isToday = (
+                        day == LocalDate.now().getDayOfMonth() &&
+                                displayMonth == LocalDate.now().getMonthValue()
+                );
+
+                // neue CalendarDayCell mit Tag + Monat
+                CalendarDayCell cell = new CalendarDayCell(day, displayMonth, isToday);
                 calendarGrid.add(cell, col, row);
                 dayOffset++;
             }
