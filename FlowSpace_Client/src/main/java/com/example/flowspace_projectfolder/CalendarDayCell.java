@@ -7,6 +7,7 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -57,6 +58,9 @@ public class CalendarDayCell extends StackPane {
         Label entryLabel = new Label(displayText);
         entryLabel.setTooltip(new Tooltip(text));
         entryBox.getChildren().add(entryLabel);
+        //print out what text is where
+        System.out.println(text + day + LocalDate.now().getMonth());
+
     }
 
     public List<String> getEntries() {

@@ -31,7 +31,7 @@ public class NetworkManager {
         try {
             out.println("login|" + username + "|" + password);
             String response = in.readLine();
-            return "OK".equalsIgnoreCase(response);
+            return "OK".equalsIgnoreCase(response); //TODO: wieso equalsIgnorecase?
         } catch (IOException e) {
             return false;
         }

@@ -17,6 +17,10 @@ import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 
 public class CalenderView extends Application {
+    String[] months = new String[]{"",
+            "January", "February", "March", "April", "May", "June",
+            "July", "August", "September", "October", "November", "December"
+    };
     @Override
     public void start(Stage stage) {
         stage.setTitle("Flowspace");
@@ -55,6 +59,20 @@ public class CalenderView extends Application {
         int firstMonday = LocalDate.now()
                 .with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY))
                 .getDayOfMonth();
+        //display month
+        // Aktuellen Monat ermitteln (Monatsname)
+        int currentMonth = LocalDate.now().getMonthValue();
+        String currentMonthName = months[currentMonth];
+
+// Label für den Monatsnamen erstellen
+        Label monthLabel = new Label(currentMonthName);
+        monthLabel.setStyle("-fx-font-size: 24px; -fx-font-weight: bold;");
+        monthLabel.setAlignment(Pos.CENTER);
+        monthLabel.setMaxWidth(Double.MAX_VALUE);
+        VBox.setMargin(monthLabel, new Insets(10, 0, 10, 0));
+
+// Kalender-Box mit Monatsname und Kalender-Grid füllen
+        calendarBox.getChildren().addAll(monthLabel, calendarLabel, calendarGrid);
         int dayOffset = 0;
         for (int row = 0; row < 4; row++) {
             for (int col = 0; col < 7; col++) {
