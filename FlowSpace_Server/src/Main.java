@@ -69,6 +69,27 @@ public class Main {
                         out.println("ERROR");
                     }
                 }
+                else if (line.startsWith("task|")) {
+                    String[] parts = line.split("\\|", 4);
+                    if (parts.length == 4) {
+                        String action = parts[1];
+                        String username = parts[2];
+                        String taskText = parts[3];
+
+                        if (action.equals("add")) {
+                            System.out.println("  -> task added - user:" + username + " | text: " + taskText);
+                            out.println("OK");
+                        } else if (action.equals("delete")) {
+                            System.out.println("  -> task removed - user:" + username + " | text: " + taskText);
+                            out.println("OK");
+                        } else {
+                            out.println("ERROR");
+                        }
+                    } else {
+                        out.println("ERROR");
+                    }
+                }
+
 
             }
         } catch (IOException e) {

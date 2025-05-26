@@ -10,10 +10,12 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 
 public class CalenderEntry extends HBox {
-    private final String text;
+    private String text;
+    private String taskText;
 
-    public CalenderEntry(String text) {
+    public CalenderEntry(String text, String taskText) {
         this.text = text;
+        this.taskText = taskText;
         setSpacing(5);
         setPadding(new Insets(4));
         setBackground(new Background(new BackgroundFill(Color.LIGHTGRAY, new CornerRadii(4), Insets.EMPTY)));
@@ -29,7 +31,7 @@ public class CalenderEntry extends HBox {
             if (getParent() instanceof Pane parent) {
                 parent.getChildren().remove(this);
                 System.out.println("Eintrag gelöscht: " + text);
-                //NetworkManager
+                NetworkManager.deleteTask(this.taskText);
             }
         });
 
@@ -43,7 +45,7 @@ public class CalenderEntry extends HBox {
         });
     }
 
-    public String getText() {
-        return text;
+    public String getTaskText() {
+        return taskText;
     }
 }

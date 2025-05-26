@@ -57,9 +57,9 @@ public class CalendarDayCell extends StackPane {
 
     private void addEntry(String text) {
         entries.add(text);
-        CalenderEntry entryView = new CalenderEntry(text);
-        entryBox.getChildren().add(entryView);
         String taskText = text + ", " + day + "." + month + "." + LocalDate.now().getYear();
+        CalenderEntry entryView = new CalenderEntry(text, taskText);
+        entryBox.getChildren().add(entryView);
         System.out.println("Neuer Task: " + taskText);
         NetworkManager.sendTask(taskText);
     }
