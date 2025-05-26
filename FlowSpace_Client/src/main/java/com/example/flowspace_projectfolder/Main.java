@@ -73,10 +73,7 @@ public class Main extends Application {
         });
 
         signupButton.setOnAction(e -> {
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Registrierung");
-            alert.setHeaderText("TODO");
-            alert.showAndWait();
+            signupButton.setOnAction(f -> SignupView.show(stage));
         });
 
         VBox formBox = new VBox(10);

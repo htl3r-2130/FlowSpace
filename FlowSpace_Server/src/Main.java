@@ -59,6 +59,7 @@ public class Main {
                 switch (command) {
                     case "login" -> handleLogin(parts, out);
                     case "task" -> handleTask(parts, out);
+                    case "signup" -> handleSignup(parts, out);
                     default -> out.println("ERROR");
                 }
             }
@@ -114,6 +115,46 @@ public class Main {
                 out.println("OK");
             }
             default -> out.println("ERROR");
+        }
+    }
+
+    private static synchronized void handleSignup(String[] parts, PrintWriter out) {
+        if (parts.length != 3) {
+            out.println("ERROR");
+            return;
+        }
+
+        String username = parts[1];
+        String password = parts[2];
+
+        if (users.containsKey(username)) {
+            System.out.println("  -> Signup failed: username '" + username + "' already exists.");
+            out.println("ERROR");
+            return;
+        }
+
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(USER_FILE, true))) {
+            writer.write(username + "=" + password);
+            writer.newLine();
+        } catch (IOException e) {
+            System.err.println("Error saving new user: " + e.getMessage());
+            out.println("ERROR");
+            return;
+        }
+
+        File calendarFile = new File(username + ".txt");
+        try {
+            if (calendarFile.createNewFile()) {
+                System.out.println("  -> Signup successful: '" + username + "' registered.");
+                loadUsers();
+                out.println("OK");
+            } else {
+                System.err.println("Error: Could not create calendar file for user '" + username + "'");
+                out.println("ERROR");
+            }
+        } catch (IOException e) {
+            System.err.println("Error creating calendar file: " + e.getMessage());
+            out.println("ERROR");
         }
     }
 }

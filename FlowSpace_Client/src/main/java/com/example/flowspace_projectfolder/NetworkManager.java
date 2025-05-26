@@ -63,4 +63,16 @@ public class NetworkManager {
             System.err.println("Error while deleting task: " + taskText);
         }
     }
+
+    public static boolean signup(String username, String password) {
+        if (!connect()) return false;
+        try {
+            out.println("signup|" + username + "|" + password);
+            String response = in.readLine();
+            return "OK".equals(response);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 }
