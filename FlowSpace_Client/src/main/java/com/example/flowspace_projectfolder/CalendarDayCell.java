@@ -10,7 +10,6 @@ import javafx.scene.shape.Circle;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-
 import static com.example.flowspace_projectfolder.CalenderView.months;
 
 public class CalendarDayCell extends StackPane {
@@ -18,6 +17,7 @@ public class CalendarDayCell extends StackPane {
     private final List<String> entries = new ArrayList<>();
     private final VBox entryBox = new VBox();
     private final int month;
+
     public CalendarDayCell(int day,int month, boolean isToday) {
         this.day = day;
         this.month = month;
@@ -32,7 +32,7 @@ public class CalendarDayCell extends StackPane {
         StackPane.setAlignment(dayLabel, Pos.TOP_RIGHT);
 
         entryBox.setSpacing(2);
-        entryBox.setPadding(new Insets(5, 5, 5, 5));
+        entryBox.setPadding(new Insets(30, 5, 5, 5));
 
         if (isToday) {
             Circle redCircle = new Circle(12);
@@ -57,13 +57,11 @@ public class CalendarDayCell extends StackPane {
 
     private void addEntry(String text) {
         entries.add(text);
-        String displayText = text.length() > 15 ? text.substring(0, 15) + "..." : text;
-        Label entryLabel = new Label(displayText);
-        entryLabel.setTooltip(new Tooltip(text));
-        entryBox.getChildren().add(entryLabel);
-        //print out new task on day
+        CalenderEntry entryView = new CalenderEntry(text);
+        entryBox.getChildren().add(entryView);
         String taskText = text + ", " + day + "." + month + "." + LocalDate.now().getYear();
         System.out.println("Neuer Task: " + taskText);
-        NetworkManager.sendTask(taskText);
+        //Network manager
     }
+
 }

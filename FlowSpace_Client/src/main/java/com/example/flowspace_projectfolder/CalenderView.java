@@ -13,8 +13,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 
 public class CalenderView extends Application {
@@ -46,9 +44,7 @@ public class CalenderView extends Application {
         root.setTop(topBar);
 
         VBox calendarBox = new VBox();
-        Label calendarLabel = new Label("Calendar");
 
-        //calendar alignments
         GridPane calendarGrid = new GridPane();
         calendarGrid.setHgap(10);
         calendarGrid.setVgap(10);
@@ -100,7 +96,7 @@ public class CalenderView extends Application {
             }
         }
 
-        calendarBox.getChildren().addAll(monthLabel, calendarLabel, calendarGrid);
+        calendarBox.getChildren().addAll(monthLabel, calendarGrid);
         root.setCenter(calendarBox);
 
         Scene scene = new Scene(root);
