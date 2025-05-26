@@ -43,54 +43,24 @@ public class Main {
     }
 
     private static void handleClient(Socket socket) {
-        try {
-            BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
-
+        try (
+                BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+                PrintWriter out = new PrintWriter(socket.getOutputStream(), true)
+        ) {
             String line;
             while ((line = in.readLine()) != null) {
-                if (line.startsWith("login|")) {
-                    String[] parts = line.split("\\|", 3);
-                    if (parts.length == 3) {
-                        String username = parts[1];
-                        String password = parts[2];
-
-                        System.out.println("- Login attempt from '" + username + "'");
-
-                        String storedPassword = users.get(username);
-                        if (storedPassword != null && storedPassword.equals(password)) {
-                            System.out.println("  -> Login successful for '" + username + "'");
-                            out.println("OK");
-                        } else {
-                            System.out.println("  -> Login failed for '" + username + "'");
-                            out.println("ERROR");
-                        }
-                    } else {
-                        out.println("ERROR");
-                    }
+                String[] parts = line.split("\\|");
+                if (parts.length == 0) {
+                    out.println("ERROR");
+                    continue;
                 }
-                else if (line.startsWith("task|")) {
-                    String[] parts = line.split("\\|", 4);
-                    if (parts.length == 4) {
-                        String action = parts[1];
-                        String username = parts[2];
-                        String taskText = parts[3];
+                String command = parts[0];
 
-                        if (action.equals("add")) {
-                            System.out.println("  -> task added - user:" + username + " | text: " + taskText);
-                            out.println("OK");
-                        } else if (action.equals("delete")) {
-                            System.out.println("  -> task removed - user:" + username + " | text: " + taskText);
-                            out.println("OK");
-                        } else {
-                            out.println("ERROR");
-                        }
-                    } else {
-                        out.println("ERROR");
-                    }
+                switch (command) {
+                    case "login" -> handleLogin(parts, out);
+                    case "task" -> handleTask(parts, out);
+                    default -> out.println("ERROR");
                 }
-
-
             }
         } catch (IOException e) {
             System.err.println("Client error: " + e.getMessage());
@@ -101,6 +71,49 @@ public class Main {
             } catch (IOException e) {
                 System.err.println("Error closing client socket: " + e.getMessage());
             }
+        }
+    }
+
+    private static void handleLogin(String[] parts, PrintWriter out) {
+        if (parts.length != 3) {
+            out.println("ERROR");
+            return;
+        }
+
+        String username = parts[1];
+        String password = parts[2];
+
+        System.out.println("- Login attempt from '" + username + "'");
+
+        String storedPassword = users.get(username);
+        if (storedPassword != null && storedPassword.equals(password)) {
+            System.out.println("  -> Login successful for '" + username + "'");
+            out.println("OK");
+        } else {
+            System.out.println("  -> Login failed for '" + username + "'");
+            out.println("ERROR");
+        }
+    }
+
+    private static void handleTask(String[] parts, PrintWriter out) {
+        if (parts.length != 4) {
+            out.println("ERROR");
+            return;
+        }
+        String action = parts[1];
+        String username = parts[2];
+        String taskText = parts[3];
+
+        switch (action) {
+            case "add" -> {
+                System.out.println("  -> task added - user:" + username + " | text: " + taskText);
+                out.println("OK");
+            }
+            case "delete" -> {
+                System.out.println("  -> task removed - user:" + username + " | text: " + taskText);
+                out.println("OK");
+            }
+            default -> out.println("ERROR");
         }
     }
 }
