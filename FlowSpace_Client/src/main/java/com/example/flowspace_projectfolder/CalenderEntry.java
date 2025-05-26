@@ -29,7 +29,7 @@ public class CalenderEntry extends HBox {
             if (getParent() instanceof Pane parent) {
                 parent.getChildren().remove(this);
                 System.out.println("Eintrag gelöscht: " + text);
-                //Networkmanager
+                //NetworkManager
             }
         });
 
@@ -42,7 +42,6 @@ public class CalenderEntry extends HBox {
             event.consume();
         });
     }
-
 
     public String getText() {
         return text;

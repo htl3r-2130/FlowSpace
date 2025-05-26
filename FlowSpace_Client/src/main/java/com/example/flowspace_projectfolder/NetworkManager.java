@@ -10,6 +10,7 @@ import java.net.Socket;
 public class NetworkManager {
     private static final String SERVER_ADDRESS = "localhost";
     private static final int PORT = 12345;
+    private static String currentUser = null;
 
     private static Socket socket;
     private static PrintWriter out;
@@ -31,10 +32,14 @@ public class NetworkManager {
         try {
             out.println("login|" + username + "|" + password);
             String response = in.readLine();
-            return "OK".equalsIgnoreCase(response);
+            if ("OK".equalsIgnoreCase(response)) {
+                currentUser = username;
+                return true;
+            }
         } catch (IOException e) {
             return false;
         }
+        return false;
     }
 
     public static void disconnect() {
@@ -42,11 +47,20 @@ public class NetworkManager {
             if (socket != null) socket.close();
         } catch (IOException ignored) {}
     }
+
     public static void sendTask(String taskText) {
-        if (out != null) {
-            out.println("New Task: " + taskText);
+        if (out != null && currentUser != null) {
+            out.println("task|add|" + currentUser + "|" + taskText);
         } else {
-            System.err.println("Nicht mit dem Server verbunden.");
+            System.err.println("Error while sending task: " + taskText);
+        }
+    }
+
+    public static void deleteTask(String taskText) {
+        if (out != null && currentUser != null) {
+            out.println("task|delete|" + currentUser + "|" + taskText);
+        } else {
+            System.err.println("Error while deleting task: " + taskText);
         }
     }
 }

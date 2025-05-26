@@ -61,7 +61,7 @@ public class CalendarDayCell extends StackPane {
         entryBox.getChildren().add(entryView);
         String taskText = text + ", " + day + "." + month + "." + LocalDate.now().getYear();
         System.out.println("Neuer Task: " + taskText);
-        //Network manager
+        NetworkManager.sendTask(taskText);
     }
 
 }
