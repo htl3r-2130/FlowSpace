@@ -30,7 +30,7 @@ public class CalenderEntry extends HBox {
         deleteItem.setOnAction(e -> {
             if (getParent() instanceof Pane parent) {
                 parent.getChildren().remove(this);
-                System.out.println("Eintrag gelöscht: " + text);
+                System.out.println("Eintrag gelöscht: " + taskText);
                 NetworkManager.deleteTask(this.taskText);
             }
         });

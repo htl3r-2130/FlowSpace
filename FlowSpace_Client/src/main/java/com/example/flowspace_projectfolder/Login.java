@@ -10,7 +10,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 
-public class Main extends Application {
+public class Login extends Application {
 
     @Override
     public void start(Stage stage) {
@@ -58,7 +58,7 @@ public class Main extends Application {
                 boolean success = NetworkManager.login(user, pw);
                 if (success) {
                     try {
-                        CalenderView calenderView = new CalenderView();
+                        HomeView calenderView = new HomeView();
                         calenderView.start(new Stage());
                         stage.close();
                     } catch (Exception ex) {
@@ -73,7 +73,7 @@ public class Main extends Application {
         });
 
         signupButton.setOnAction(e -> {
-            signupButton.setOnAction(f -> SignupView.show(stage));
+            signupButton.setOnAction(f -> Signup.show(stage));
         });
 
         VBox formBox = new VBox(10);

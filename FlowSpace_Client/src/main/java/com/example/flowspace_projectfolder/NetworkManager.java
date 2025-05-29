@@ -48,19 +48,19 @@ public class NetworkManager {
         } catch (IOException ignored) {}
     }
 
-    public static void sendTask(String taskText) {
+    public static void sendTask(String formattedTaskText) {
         if (out != null && currentUser != null) {
-            out.println("task|add|" + currentUser + "|" + taskText);
+            out.println("task|add|" + currentUser + "|" + formattedTaskText);
         } else {
-            System.err.println("Error while sending task: " + taskText);
+            System.err.println("Error while sending task: " + formattedTaskText);
         }
     }
 
-    public static void deleteTask(String taskText) {
+    public static void deleteTask(String formattedTaskText) {
         if (out != null && currentUser != null) {
-            out.println("task|delete|" + currentUser + "|" + taskText);
+            out.println("task|delete|" + currentUser + "|" + formattedTaskText);
         } else {
-            System.err.println("Error while deleting task: " + taskText);
+            System.err.println("Error while deleting task: " + formattedTaskText);
         }
     }
 

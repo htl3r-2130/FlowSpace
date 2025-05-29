@@ -15,7 +15,7 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 
-public class CalenderView extends Application {
+public class HomeView extends Application {
     public static final String[] months = new String[]{"",
             "January", "February", "March", "April", "May", "June",
             "July", "August", "September", "October", "November", "December"
@@ -75,7 +75,8 @@ public class CalenderView extends Application {
             for (int col = 0; col < 7; col++) {
                 // day logic for calendar
                 int day = firstMonday + dayOffset;
-                int displayMonth = LocalDate.now().getMonthValue(); // aktueller Monat
+                int displayMonth = LocalDate.now().getMonthValue();
+                int currentYear = LocalDate.now().getYear();
 
                 if (day > curMonthLength) {
                     day = day - curMonthLength;
@@ -83,14 +84,13 @@ public class CalenderView extends Application {
                     if (displayMonth > 12) displayMonth = 1;
                 }
 
-                // check if it's today
                 boolean isToday = (
                         day == LocalDate.now().getDayOfMonth() &&
                                 displayMonth == LocalDate.now().getMonthValue()
                 );
 
-                // neue CalendarDayCell mit Tag + Monat
-                CalendarDayCell cell = new CalendarDayCell(day, displayMonth, isToday);
+                // neue CalendarDayCell mit Tag,Monat,Jahr
+                CalendarDayCell cell = new CalendarDayCell(day, displayMonth, currentYear, isToday);
                 calendarGrid.add(cell, col, row);
                 dayOffset++;
             }

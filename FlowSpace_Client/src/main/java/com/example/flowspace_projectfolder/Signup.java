@@ -7,7 +7,7 @@ import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
-public class SignupView {
+public class Signup {
 
     public static void show(Stage owner) {
         Stage dialog = new Stage();

@@ -10,17 +10,19 @@ import javafx.scene.shape.Circle;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import static com.example.flowspace_projectfolder.CalenderView.months;
+import static com.example.flowspace_projectfolder.HomeView.months;
 
 public class CalendarDayCell extends StackPane {
-    private final int day;
     private final List<String> entries = new ArrayList<>();
     private final VBox entryBox = new VBox();
+    private final int day;
     private final int month;
+    private final int year;
 
-    public CalendarDayCell(int day,int month, boolean isToday) {
+    public CalendarDayCell(int day,int month, int year, boolean isToday) {
         this.day = day;
         this.month = month;
+        this.year = year;
 
         Region background = new Region();
         background.setPrefSize(100, 100);
@@ -30,7 +32,6 @@ public class CalendarDayCell extends StackPane {
         dayLabel.setTextFill(Color.GRAY);
         dayLabel.setPadding(new Insets(5));
         StackPane.setAlignment(dayLabel, Pos.TOP_RIGHT);
-
         entryBox.setSpacing(2);
         entryBox.setPadding(new Insets(30, 5, 5, 5));
 
@@ -57,11 +58,12 @@ public class CalendarDayCell extends StackPane {
 
     private void addEntry(String text) {
         entries.add(text);
-        String taskText = text + ", " + day + "." + month + "." + LocalDate.now().getYear();
-        CalenderEntry entryView = new CalenderEntry(text, taskText);
+        LocalDate date = LocalDate.of(year, month, day);
+        String isoDate = date.toString(); // YYYY-MM-DD
+        String formattedForServer = isoDate + "|" + text;
+        CalenderEntry entryView = new CalenderEntry(text, formattedForServer);
         entryBox.getChildren().add(entryView);
-        System.out.println("Neuer Task: " + taskText);
-        NetworkManager.sendTask(taskText);
+        System.out.println("New Task: " + formattedForServer);
+        NetworkManager.sendTask(formattedForServer);
     }
-
 }

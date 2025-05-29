@@ -97,42 +97,79 @@ public class Main {
     }
 
     private static void handleTask(String[] parts, PrintWriter out) {
-        if (parts.length != 4) {
+        if (parts.length != 5) {
             out.println("ERROR");
             return;
         }
+
         String action = parts[1];
         String username = parts[2];
-        String taskText = parts[3];
-
-        switch (action) {
-            case "add" -> {
-                System.out.println("  -> task added - user:" + username + " | text: " + taskText);
-                out.println("OK");
+        String date = parts[3]; // YYYY-MM-DD
+        String taskText = parts[4];
+        String fullLine = date + "|" + taskText;
+        File userFile = new File(username + ".txt");
+        synchronized (("lock_" + username).intern()) {
+            switch (action) {
+                case "add" -> {
+                    try (BufferedWriter writer = new BufferedWriter(new FileWriter(userFile, true))) {
+                        writer.write(fullLine);
+                        writer.newLine();
+                        System.out.println("  -> task added - user:" + username + " | " + fullLine);
+                        out.println("OK");
+                    } catch (IOException e) {
+                        System.err.println("Error writing task: " + e.getMessage());
+                        out.println("ERROR");
+                    }
+                }
+                case "delete" -> {
+                    if (!userFile.exists()) {
+                        out.println("ERROR");
+                        return;
+                    }
+                    try {
+                        List<String> lines = new ArrayList<>();
+                        boolean removed = false;
+                        try (BufferedReader reader = new BufferedReader(new FileReader(userFile))) {
+                            String line;
+                            while ((line = reader.readLine()) != null) {
+                                if (!removed && line.equals(fullLine)) {
+                                    removed = true;
+                                    continue;
+                                }
+                                lines.add(line);
+                            }
+                        }
+                        try (BufferedWriter writer = new BufferedWriter(new FileWriter(userFile))) {
+                            for (String line : lines) {
+                                writer.write(line);
+                                writer.newLine();
+                            }
+                        }
+                        System.out.println("  -> task removed - user:" + username + " | " + fullLine);
+                        out.println("OK");
+                    } catch (IOException e) {
+                        System.err.println("Error modifying task file: " + e.getMessage());
+                        out.println("ERROR");
+                    }
+                }
+                default -> out.println("ERROR");
             }
-            case "delete" -> {
-                System.out.println("  -> task removed - user:" + username + " | text: " + taskText);
-                out.println("OK");
-            }
-            default -> out.println("ERROR");
         }
     }
+
 
     private static synchronized void handleSignup(String[] parts, PrintWriter out) {
         if (parts.length != 3) {
             out.println("ERROR");
             return;
         }
-
         String username = parts[1];
         String password = parts[2];
-
         if (users.containsKey(username)) {
             System.out.println("  -> Signup failed: username '" + username + "' already exists.");
             out.println("ERROR");
             return;
         }
-
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(USER_FILE, true))) {
             writer.write(username + "=" + password);
             writer.newLine();
@@ -141,7 +178,6 @@ public class Main {
             out.println("ERROR");
             return;
         }
-
         File calendarFile = new File(username + ".txt");
         try {
             if (calendarFile.createNewFile()) {
