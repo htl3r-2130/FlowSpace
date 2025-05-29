@@ -5,6 +5,7 @@ import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Box;
 import javafx.scene.shape.Circle;
 
 import java.time.LocalDate;
@@ -25,26 +26,34 @@ public class CalendarDayCell extends StackPane {
         this.year = year;
 
         Region background = new Region();
-        background.setPrefSize(100, 100);
+        background.setPrefSize(200, 200);
         background.setStyle("-fx-background-color: #d0ddff;");
 
         Label dayLabel = new Label(String.valueOf(day));
-        dayLabel.setTextFill(Color.GRAY);
-        dayLabel.setPadding(new Insets(5));
+        dayLabel.setPadding(new Insets(10));
         StackPane.setAlignment(dayLabel, Pos.TOP_RIGHT);
         entryBox.setSpacing(2);
-        entryBox.setPadding(new Insets(30, 5, 5, 5));
+        entryBox.setPadding(new Insets(35, 5, 5, 5));
 
         if (isToday) {
             Circle redCircle = new Circle(12);
-            redCircle.setFill(Color.grayRgb(200));
+            redCircle.setFill(Color.RED);
+            redCircle.setOpacity(0.2);
             StackPane.setAlignment(redCircle, Pos.TOP_RIGHT);
+            StackPane.setMargin(redCircle, new Insets(6, 5, 0, 0));
             this.getChildren().addAll(background, redCircle, dayLabel, entryBox);
         } else {
             this.getChildren().addAll(background, dayLabel, entryBox);
         }
 
         this.setOnMouseClicked(e -> promptNewEntry());
+    }
+
+    public void addMonthTag(String monthAbbreviation) {
+        Label tag = new Label(monthAbbreviation);
+        tag.setPadding(new Insets(10, 0, 0, 10));
+        StackPane.setAlignment(tag, Pos.TOP_LEFT);
+        this.getChildren().add(tag);
     }
 
     private void promptNewEntry() {
