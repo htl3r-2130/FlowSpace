@@ -151,6 +151,21 @@ public class Main {
                         out.println("ERROR");
                     }
                 }
+                case "get" -> {
+                    if (!userFile.exists()) {
+                        out.println("END");
+                        return;
+                    }
+                    try (BufferedReader reader = new BufferedReader(new FileReader(userFile))) {
+                        String line;
+                        while ((line = reader.readLine()) != null) {
+                            out.println(line); // Send: YYYY-MM-DD|Task text
+                        }
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                    out.println("END");
+                }
                 default -> out.println("ERROR");
             }
         }

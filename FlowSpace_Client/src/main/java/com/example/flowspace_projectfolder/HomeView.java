@@ -3,6 +3,9 @@ package com.example.flowspace_projectfolder;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.temporal.TemporalAdjusters;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import javafx.application.Application;
 import javafx.geometry.Insets;
@@ -14,6 +17,7 @@ import javafx.scene.layout.*;
 import javafx.stage.Stage;
 
 public class HomeView extends Application {
+    Map<LocalDate, CalendarDayCell> dateCellMap = new HashMap<>();
     public static final String[] months = new String[]{"",
             "January", "February", "March", "April", "May", "June",
             "July", "August", "September", "October", "November", "December"
@@ -70,6 +74,7 @@ public class HomeView extends Application {
                 cell.addMonthTag(months[month].substring(0, 3));
             }
             calendarGrid.add(cell, col, row);
+            dateCellMap.put(date, cell);
             col++;
             if (col > 6) {
                 col = 0;
@@ -84,6 +89,20 @@ public class HomeView extends Application {
         root.setCenter(scrollPane);
 
         Scene scene = new Scene(root);
+
+        List<String> tasks = NetworkManager.loadUserTasks();
+        for (String entry : tasks) {
+            String[] parts = entry.split("\\|", 2);
+            if (parts.length != 2) continue;
+            LocalDate date = LocalDate.parse(parts[0]);
+            String text = parts[1];
+
+            CalendarDayCell cell = dateCellMap.get(date);
+            if (cell != null) {
+                cell.loadEntry(text); // Neue Methode
+            }
+        }
+
         stage.setScene(scene);
         stage.show();
     }

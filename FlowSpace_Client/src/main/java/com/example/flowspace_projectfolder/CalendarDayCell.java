@@ -5,7 +5,6 @@ import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Box;
 import javafx.scene.shape.Circle;
 
 import java.time.LocalDate;
@@ -74,5 +73,13 @@ public class CalendarDayCell extends StackPane {
         entryBox.getChildren().add(entryView);
         System.out.println("New Task: " + formattedForServer);
         NetworkManager.sendTask(formattedForServer);
+    }
+
+    public void loadEntry(String text) {
+        entries.add(text);
+        String isoDate = LocalDate.of(year, month, day).toString();
+        String full = isoDate + "|" + text;
+        CalenderEntry entryView = new CalenderEntry(text, full);
+        entryBox.getChildren().add(entryView);
     }
 }

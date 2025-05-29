@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.List;
 
 public class NetworkManager {
     private static final String SERVER_ADDRESS = "localhost";
@@ -74,5 +76,25 @@ public class NetworkManager {
             e.printStackTrace();
             return false;
         }
+    }
+
+    public static List<String> loadUserTasks() {
+        List<String> tasks = new ArrayList<>();
+        if (out != null && currentUser != null) {
+            try {
+                out.println("task|get|" + currentUser + "|-|-");
+                String line;
+                while ((line = in.readLine()) != null && !line.equals("END")) {
+                    tasks.add(line);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return tasks;
+    }
+
+    public static String getCurrentUser() {
+        return currentUser;
     }
 }
