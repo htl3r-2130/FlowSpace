@@ -101,13 +101,12 @@ public class Main {
             out.println("ERROR");
             return;
         }
-
         String action = parts[1];
         String username = parts[2];
         String date = parts[3]; // YYYY-MM-DD
         String taskText = parts[4];
         String fullLine = date + "|" + taskText;
-        File userFile = new File(username + ".txt");
+        File userFile = new File("userFiles/" + username + ".txt");
         synchronized (("lock_" + username).intern()) {
             switch (action) {
                 case "add" -> {
@@ -171,14 +170,14 @@ public class Main {
             return;
         }
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(USER_FILE, true))) {
-            writer.write(username + "=" + password);
             writer.newLine();
+            writer.write(username + "=" + password);
         } catch (IOException e) {
             System.err.println("Error saving new user: " + e.getMessage());
             out.println("ERROR");
             return;
         }
-        File calendarFile = new File(username + ".txt");
+        File calendarFile = new File("userFiles/" + username + ".txt");
         try {
             if (calendarFile.createNewFile()) {
                 System.out.println("  -> Signup successful: '" + username + "' registered.");
