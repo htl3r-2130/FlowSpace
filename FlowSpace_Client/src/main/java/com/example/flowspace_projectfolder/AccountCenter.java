@@ -38,11 +38,12 @@ public class AccountCenter {
 
         Button logoutBtn = new Button("Logout");
         logoutBtn.setOnAction(e -> {
+            Login.clearStaySignedIn();
             NetworkManager.disconnect();
-            dialog.close();  // Schließt den Account Center Dialog
-            parentStage.close(); // Schließt die HomeView Stage
-            Stage loginStage = new Stage();  // Neue Stage für Login
-            new Login().start(loginStage);   // Startet die Login-View
+            dialog.close();
+            parentStage.close();
+            Stage loginStage = new Stage();
+            new Login().start(loginStage);
         });
 
         header.getChildren().addAll(icon, usernameLabel, logoutBtn);
@@ -86,10 +87,11 @@ public class AccountCenter {
             if (confirmed) {
                 boolean deleted = NetworkManager.deleteAccount();
                 if (deleted) {
-                    dialog.close();  // Schließt den Account Center Dialog
-                    parentStage.close(); // Schließt die HomeView Stage
-                    Stage loginStage = new Stage();  // Neue Stage für Login
-                    new Login().start(loginStage);   // Startet die Login-View
+                    Login.clearStaySignedIn();
+                    dialog.close();
+                    parentStage.close();
+                    Stage loginStage = new Stage();
+                    new Login().start(loginStage);
                 } else {
                     statusLabel.setText("Fehler beim Löschen.");
                 }

@@ -7,6 +7,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 
 public class NetworkManager {
@@ -116,6 +117,37 @@ public class NetworkManager {
                     currentUser = null;
                     return true;
                 }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return false;
+    }
+
+    public static String downloadConfig() {
+        if (out != null && currentUser != null) {
+            try {
+                out.println("config|get|" + currentUser);
+                StringBuilder sb = new StringBuilder();
+                String line;
+                while ((line = in.readLine()) != null && !line.equals("END")) {
+                    sb.append(new String(Base64.getDecoder().decode(line))).append("\n");
+                }
+                return sb.toString();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
+    }
+
+    public static boolean uploadConfig(String content) {
+        if (out != null && currentUser != null) {
+            try {
+                String encoded = Base64.getEncoder().encodeToString(content.getBytes());
+                out.println("config|put|" + currentUser + "|" + encoded);
+                String response = in.readLine();
+                return "OK".equals(response);
             } catch (IOException e) {
                 e.printStackTrace();
             }

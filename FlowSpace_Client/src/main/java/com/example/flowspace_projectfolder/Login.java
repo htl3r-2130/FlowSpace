@@ -10,7 +10,13 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+
 public class Login extends Application {
+    private CheckBox staySignedInBox = new CheckBox("Angemeldet bleiben");
+    private static final File STAY_SIGNED_IN_FILE = new File("staySignedIn.txt");
 
     @Override
     public void start(Stage stage) {
@@ -45,6 +51,30 @@ public class Login extends Application {
 
         Button signupButton = new Button("Noch kein Konto? Registrieren");
 
+        VBox formBox = new VBox(10);
+        formBox.setAlignment(Pos.CENTER_LEFT);
+        formBox.setMaxWidth(300);
+
+        HBox validationBox = new HBox(10);
+        validationBox.getChildren().addAll(signupButton, loginButton);
+
+        formBox.getChildren().addAll(
+                userLabel, usernameField,
+                pwLabel, passwordField,
+                staySignedInBox,
+                validationBox, statusLabel
+        );
+
+        root.getChildren().addAll(logo, formBox);
+
+        Scene scene = new Scene(root);
+        stage.setScene(scene);
+        stage.show();
+
+        // Automatischer Login
+        tryAutoLogin(stage);
+
+        // Login Button handler
         loginButton.setOnAction(e -> {
             String user = usernameField.getText();
             String pw = passwordField.getText();
@@ -57,13 +87,14 @@ public class Login extends Application {
                 }
                 boolean success = NetworkManager.login(user, pw);
                 if (success) {
-                    try {
-                        HomeView calenderView = new HomeView();
-                        calenderView.start(new Stage());
-                        stage.close();
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
+                    if (staySignedInBox.isSelected()) {
+                        try {
+                            Files.writeString(STAY_SIGNED_IN_FILE.toPath(), user + "=" + pw);
+                        } catch (IOException ex) {
+                            System.err.println("Fehler beim Schreiben der staySignedIn.txt");
+                        }
                     }
+                    openHome(stage);
                 } else {
                     statusLabel.setText("Login fehlgeschlagen");
                 }
@@ -72,21 +103,42 @@ public class Login extends Application {
             }
         });
 
-        signupButton.setOnAction(e -> {
-            signupButton.setOnAction(f -> Signup.show(stage));
-        });
+        signupButton.setOnAction(f -> Signup.show(stage));
+    }
 
-        VBox formBox = new VBox(10);
-        formBox.setAlignment(Pos.CENTER_LEFT);
-        formBox.setMaxWidth(300);
-        HBox validationBox = new HBox(10);
-        validationBox.getChildren().addAll(signupButton, loginButton);
-        formBox.getChildren().addAll(userLabel, usernameField, pwLabel, passwordField, validationBox, statusLabel);
+    private void tryAutoLogin(Stage stage) {
+        if (STAY_SIGNED_IN_FILE.exists()) {
+            try {
+                String content = Files.readString(STAY_SIGNED_IN_FILE.toPath());
+                String[] parts = content.split("=", 2);
+                if (parts.length == 2) {
+                    String user = parts[0];
+                    String pw = parts[1];
+                    boolean connected = NetworkManager.connect();
+                    if (connected && NetworkManager.login(user, pw)) {
+                        openHome(stage);
+                    }
+                }
+            } catch (IOException e) {
+                System.err.println("Fehler beim automatischen Login.");
+            }
+        }
+    }
 
-        root.getChildren().addAll(logo, formBox);
-        Scene scene = new Scene(root);
-        stage.setScene(scene);
-        stage.show();
+    private void openHome(Stage loginStage) {
+        try {
+            HomeView home = new HomeView();
+            home.start(new Stage());
+            loginStage.close();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public static void clearStaySignedIn() {
+        if (STAY_SIGNED_IN_FILE.exists()) {
+            STAY_SIGNED_IN_FILE.delete();
+        }
     }
 
     public static void main(String[] args) {

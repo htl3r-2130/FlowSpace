@@ -42,7 +42,7 @@ public class CalendarDayCell extends StackPane {
             redCircle.setFill(Color.RED);
             redCircle.setOpacity(0.2);
             StackPane.setAlignment(redCircle, Pos.TOP_RIGHT);
-            StackPane.setMargin(redCircle, new Insets(6, 5, 0, 0));
+            StackPane.setMargin(redCircle, new Insets(6, 2, 0, 0));
             this.getChildren().addAll(background, redCircle, dayLabel, entryBox);
         } else {
             this.getChildren().addAll(background, dayLabel, entryBox);

@@ -61,6 +61,7 @@ public class Main {
                     case "task" -> handleTask(parts, out);
                     case "signup" -> handleSignup(parts, out);
                     case "account" -> handleAccount(parts, out);
+                    case "config" -> handleConfig(parts, out);
                     default -> out.println("ERROR");
                 }
             }
@@ -263,6 +264,50 @@ public class Main {
                 }
             }
 
+            default -> out.println("ERROR");
+        }
+    }
+
+    private static void handleConfig(String[] parts, PrintWriter out) {
+        if (parts.length < 3) {
+            out.println("ERROR");
+            return;
+        }
+        String action = parts[1];
+        String username = parts[2];
+        File configFile = new File("userFiles/" + username + ".txt");
+
+        switch (action) {
+            case "get" -> {
+                if (!configFile.exists()) {
+                    out.println("END");
+                    return;
+                }
+                try (BufferedReader reader = new BufferedReader(new FileReader(configFile))) {
+                    String line;
+                    while ((line = reader.readLine()) != null) {
+                        out.println(Base64.getEncoder().encodeToString(line.getBytes()));
+                    }
+                    out.println("END");
+                } catch (IOException e) {
+                    out.println("ERROR");
+                }
+            }
+            case "put" -> {
+                if (parts.length != 4) {
+                    out.println("ERROR");
+                    return;
+                }
+                try {
+                    byte[] decoded = Base64.getDecoder().decode(parts[3]);
+                    try (BufferedWriter writer = new BufferedWriter(new FileWriter(configFile))) {
+                        writer.write(new String(decoded));
+                    }
+                    out.println("OK");
+                } catch (Exception e) {
+                    out.println("ERROR");
+                }
+            }
             default -> out.println("ERROR");
         }
     }

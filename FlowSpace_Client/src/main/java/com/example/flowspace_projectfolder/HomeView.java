@@ -44,6 +44,7 @@ public class HomeView extends Application {
         Button profileBtn = new Button("Profile");
 
         profileBtn.setOnAction(e -> AccountCenter.show(stage, stage));
+        settingsBtn.setOnAction(f -> Settings.show(stage, stage));
 
         topBar.getChildren().addAll(searchField, searchButton, spacer, darkModeBtn, settingsBtn, profileBtn);
         topBar.setPadding(new Insets(30));
