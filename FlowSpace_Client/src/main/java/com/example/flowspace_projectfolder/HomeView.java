@@ -69,7 +69,7 @@ public class HomeView extends Application {
             boolean isToday = date.equals(LocalDate.now());
             boolean showMonthLabel = day == 1;
 
-            CalendarDayCell cell = new CalendarDayCell(day, month, year, isToday);
+            CalendarDayCell cell = new CalendarDayCell(day, month, year, isToday, stage);
             if (showMonthLabel) {
                 cell.addMonthTag(months[month].substring(0, 3));
             }

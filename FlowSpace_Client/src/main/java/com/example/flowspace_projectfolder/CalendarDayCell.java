@@ -2,10 +2,13 @@ package com.example.flowspace_projectfolder;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -19,7 +22,7 @@ public class CalendarDayCell extends StackPane {
     private final int month;
     private final int year;
 
-    public CalendarDayCell(int day,int month, int year, boolean isToday) {
+    public CalendarDayCell(int day,int month, int year, boolean isToday, Stage stage) {
         this.day = day;
         this.month = month;
         this.year = year;
@@ -45,7 +48,7 @@ public class CalendarDayCell extends StackPane {
             this.getChildren().addAll(background, dayLabel, entryBox);
         }
 
-        this.setOnMouseClicked(e -> promptNewEntry());
+        this.setOnMouseClicked(e -> promptNewEntry(stage));
     }
 
     public void addMonthTag(String monthAbbreviation) {
@@ -55,13 +58,40 @@ public class CalendarDayCell extends StackPane {
         this.getChildren().add(tag);
     }
 
-    private void promptNewEntry() {
-        TextInputDialog dialog = new TextInputDialog();
-        dialog.setTitle("Neuer Eintrag");
-        dialog.setHeaderText("Task für den " + day + ". "+ months[month] + " eingeben:");
-        dialog.setContentText("Eintrag:");
+    private void promptNewEntry(Stage owner) {
+        Stage popupStage = new Stage();
+        popupStage.initModality(Modality.WINDOW_MODAL);
+        popupStage.initOwner(owner);
+        popupStage.setTitle("Neuer Eintrag");
 
-        dialog.showAndWait().ifPresent(this::addEntry);
+        Label header = new Label("Task für den " + day + ". " + months[month] + " eingeben:");
+        TextField inputField = new TextField();
+        inputField.setPromptText("Eintrag");
+
+        Button okButton = new Button("Hinzufügen");
+        Button cancelButton = new Button("Abbrechen");
+
+        okButton.setOnAction(e -> {
+            String entry = inputField.getText().trim();
+            if (!entry.isEmpty()) {
+                addEntry(entry);
+            }
+            popupStage.close();
+        });
+
+        cancelButton.setOnAction(e -> popupStage.close());
+
+        HBox buttons = new HBox(10, okButton, cancelButton);
+        buttons.setAlignment(Pos.CENTER);
+
+        VBox layout = new VBox(15, header, inputField, buttons);
+        layout.setAlignment(Pos.CENTER);
+        layout.setStyle("-fx-background-color: #d0ddff; -fx-background-radius: 10; -fx-padding: 20;");
+
+        Scene scene = new Scene(layout, 350, 200);
+        scene.getStylesheets().add(getClass().getResource("/style.css").toExternalForm());
+        popupStage.setScene(scene);
+        popupStage.showAndWait();
     }
 
     private void addEntry(String text) {
