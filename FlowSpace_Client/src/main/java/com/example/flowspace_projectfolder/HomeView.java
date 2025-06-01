@@ -13,14 +13,17 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 public class HomeView extends Application {
+
     Map<LocalDate, CalendarDayCell> dateCellMap = new HashMap<>();
     public static final String[] months = new String[]{"",
-            "January", "February", "March", "April", "May", "June",
-            "July", "August", "September", "October", "November", "December"
+            "Jänner", "Februar", "März", "April", "Mai", "Juni",
+            "Juli", "August", "September", "Oktober", "November", "Dezember"
     };
 
     @Override
@@ -30,11 +33,15 @@ public class HomeView extends Application {
         stage.getIcons().add(new Image("file:resources/icon.png"));
         stage.centerOnScreen();
 
-        BorderPane root = new BorderPane();
+        // Root als StackPane für Overlay + Popup
+        StackPane root = new StackPane();
+
+        // Hauptinhalt als BorderPane, wird in StackPane gelegt
+        BorderPane mainPane = new BorderPane();
+        root.getChildren().add(mainPane);
 
         // Top bar
         HBox topBar = new HBox();
-        TextField searchField = new TextField();
         Button searchButton = new Button("Search");
         Region spacer = new Region();
         HBox.setHgrow(spacer, Priority.ALWAYS);
@@ -43,12 +50,12 @@ public class HomeView extends Application {
         Button settingsBtn = new Button("Settings");
         Button profileBtn = new Button("Profile");
 
-        topBar.getChildren().addAll(searchField, searchButton, spacer, darkModeBtn, settingsBtn, profileBtn);
+        topBar.getChildren().addAll(searchButton, spacer, darkModeBtn, settingsBtn, profileBtn);
         topBar.setPadding(new Insets(30));
         topBar.setSpacing(10);
-        root.setTop(topBar);
+        mainPane.setTop(topBar);
 
-        // Calender grid
+        // Kalender grid
         GridPane calendarGrid = new GridPane();
         calendarGrid.setHgap(6);
         calendarGrid.setVgap(6);
@@ -57,7 +64,7 @@ public class HomeView extends Application {
 
         LocalDate today = LocalDate.now();
         LocalDate start = today.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
-        LocalDate end = LocalDate.of(today.getYear(), 12, 31); //Adjust grid length
+        LocalDate end = LocalDate.of(today.getYear(), 12, 31); //Grid-Länge
 
         int row = 0;
         int col = 0;
@@ -86,10 +93,17 @@ public class HomeView extends Application {
         scrollPane.setFitToWidth(true);
         scrollPane.setPadding(new Insets(10));
 
-        root.setCenter(scrollPane);
+        mainPane.setCenter(scrollPane);
 
-        Scene scene = new Scene(root);
+        // Popup erzeugen
+        SearchPopup popup = new SearchPopup(root);
 
+        // Search Button öffnet Popup
+        searchButton.setOnAction(e -> {
+            popup.show();
+        });
+
+        // Falls du Tasks lädst (deine Logik)
         List<String> tasks = NetworkManager.loadUserTasks();
         for (String entry : tasks) {
             String[] parts = entry.split("\\|", 2);
@@ -99,10 +113,11 @@ public class HomeView extends Application {
 
             CalendarDayCell cell = dateCellMap.get(date);
             if (cell != null) {
-                cell.loadEntry(text); // Neue Methode
+                cell.loadEntry(text); // Methode in CalendarDayCell
             }
         }
 
+        Scene scene = new Scene(root);
         stage.setScene(scene);
         stage.show();
     }
