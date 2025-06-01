@@ -1,5 +1,0 @@
-<<<<<<< HEAD
-2025-06-01|Test
-2025-06-01|ZZZZ
-=======
->>>>>>> feature/search-bar
