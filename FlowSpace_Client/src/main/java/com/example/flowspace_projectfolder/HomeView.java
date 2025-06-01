@@ -43,6 +43,15 @@ public class HomeView extends Application {
         // Top bar
         HBox topBar = new HBox();
         Button searchButton = new Button("Search");
+        searchButton.setStyle(
+                "-fx-background-color: #d0ddff;" +    // blauer Hintergrund
+                        "-fx-text-fill: black;" +             // Textfarbe schwarz (oder weiß, je nach Wunsch)
+                        "-fx-font-size: 16px;" +              // größere Schrift
+                        "-fx-font-weight: bold;" +            // fett
+                        "-fx-padding: 8 20 8 20;" +           // größerer Padding (oben, rechts, unten, links)
+                        "-fx-background-radius: 5;"           // abgerundete Ecken
+        );
+
         Region spacer = new Region();
         HBox.setHgrow(spacer, Priority.ALWAYS);
 
