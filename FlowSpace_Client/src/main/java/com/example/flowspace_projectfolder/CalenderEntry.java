@@ -1,10 +1,14 @@
 package com.example.flowspace_projectfolder;
 
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
 public class CalenderEntry extends HBox {
     private String text;
@@ -25,13 +29,21 @@ public class CalenderEntry extends HBox {
 
         MenuItem editItem = new MenuItem("Bearbeiten");
         editItem.setOnAction(e -> {
-            TextInputDialog dialog = new TextInputDialog(text);
-            dialog.setTitle("Eintrag bearbeiten");
-            dialog.setHeaderText("Bearbeite deinen Task:");
-            dialog.setContentText("Neuer Text:");
+            Stage popupStage = new Stage();
+            popupStage.initModality(Modality.WINDOW_MODAL);
 
-            dialog.showAndWait().ifPresent(newText -> {
-                if (!newText.trim().isEmpty()) {
+            popupStage.setTitle("Eintrag bearbeiten");
+
+            Label header = new Label("Bearbeite deinen Task:");
+            TextField inputField = new TextField(text); // "text" ist der aktuelle Eintrag
+            inputField.setPromptText("Neuer Text");
+
+            Button okButton = new Button("Speichern");
+            Button cancelButton = new Button("Abbrechen");
+
+            okButton.setOnAction(ev -> {
+                String newText = inputField.getText().trim();
+                if (!newText.isEmpty()) {
                     // Alte Aufgabe löschen
                     NetworkManager.deleteTask(taskText);
 
@@ -48,7 +60,22 @@ public class CalenderEntry extends HBox {
                     NetworkManager.sendTask(this.taskText);
                     System.out.println("Eintrag aktualisiert: " + this.taskText);
                 }
+                popupStage.close();
             });
+
+            cancelButton.setOnAction(ev -> popupStage.close());
+
+            HBox buttons = new HBox(10, okButton, cancelButton);
+            buttons.setAlignment(Pos.CENTER);
+
+            VBox layout = new VBox(15, header, inputField, buttons);
+            layout.setAlignment(Pos.CENTER);
+            layout.setStyle("-fx-background-color: #d0ddff; -fx-background-radius: 10; -fx-padding: 20;");
+
+            Scene scene = new Scene(layout, 350, 200);
+            scene.getStylesheets().add(getClass().getResource("/style.css").toExternalForm());
+            popupStage.setScene(scene);
+            popupStage.showAndWait();
         });
 
         MenuItem deleteItem = new MenuItem("Löschen");
