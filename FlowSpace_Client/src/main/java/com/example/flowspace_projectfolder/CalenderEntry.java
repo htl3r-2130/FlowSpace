@@ -16,9 +16,8 @@ public class CalenderEntry extends HBox {
     public CalenderEntry(String text, String taskText) {
         this.text = text;
         this.taskText = taskText;
-        setSpacing(5);
-        setPadding(new Insets(4));
-        setBackground(new Background(new BackgroundFill(Color.LIGHTGRAY, new CornerRadii(4), Insets.EMPTY)));
+        setPadding(new Insets(10));
+        setBackground(new Background(new BackgroundFill(Color.web("#E4EBFF"), new CornerRadii(4), Insets.EMPTY)));
 
         Label label = new Label(text.length() > 15 ? text.substring(0, 15) + "..." : text);
         label.setTooltip(new Tooltip(text));
