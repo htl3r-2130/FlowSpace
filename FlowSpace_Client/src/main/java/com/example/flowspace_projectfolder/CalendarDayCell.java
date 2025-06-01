@@ -34,7 +34,7 @@ public class CalendarDayCell extends StackPane {
         Label dayLabel = new Label(String.valueOf(day));
         dayLabel.setPadding(new Insets(10));
         StackPane.setAlignment(dayLabel, Pos.TOP_RIGHT);
-        entryBox.setSpacing(2);
+        entryBox.setSpacing(5);
         entryBox.setPadding(new Insets(35, 5, 5, 5));
 
         if (isToday) {
