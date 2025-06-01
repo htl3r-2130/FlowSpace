@@ -60,6 +60,7 @@ public class Main {
                     case "login" -> handleLogin(parts, out);
                     case "task" -> handleTask(parts, out);
                     case "signup" -> handleSignup(parts, out);
+                    case "account" -> handleAccount(parts, out);
                     default -> out.println("ERROR");
                 }
             }
@@ -205,6 +206,64 @@ public class Main {
         } catch (IOException e) {
             System.err.println("Error creating calendar file: " + e.getMessage());
             out.println("ERROR");
+        }
+    }
+
+    private static void handleAccount(String[] parts, PrintWriter out) {
+        if (parts.length < 3) {
+            out.println("ERROR");
+            return;
+        }
+
+        String action = parts[1];
+        String username = parts[2];
+
+        switch (action) {
+            case "changePassword" -> {
+                if (parts.length != 4) {
+                    out.println("ERROR");
+                    return;
+                }
+                String newPassword = parts[3];
+                users.put(username, newPassword);
+                try (BufferedWriter writer = new BufferedWriter(new FileWriter(USER_FILE))) {
+                    for (Map.Entry<String, String> entry : users.entrySet()) {
+                        writer.write(entry.getKey() + "=" + entry.getValue());
+                        writer.newLine();
+                    }
+                    System.out.println("  -> password changed for: " + username);
+                    out.println("OK");
+                } catch (IOException e) {
+                    System.err.println("Error saving password: " + e.getMessage());
+                    out.println("ERROR");
+                }
+            }
+
+            case "delete" -> {
+                users.remove(username);
+                File userFile = new File("userFiles/" + username + ".txt");
+                boolean deletedData = userFile.delete();
+
+                try (BufferedWriter writer = new BufferedWriter(new FileWriter(USER_FILE))) {
+                    for (Map.Entry<String, String> entry : users.entrySet()) {
+                        writer.write(entry.getKey() + "=" + entry.getValue());
+                        writer.newLine();
+                    }
+                } catch (IOException e) {
+                    System.err.println("Error updating user list: " + e.getMessage());
+                    out.println("ERROR");
+                    return;
+                }
+
+                if (deletedData) {
+                    System.out.println("  -> account deleted: " + username);
+                    out.println("OK");
+                } else {
+                    out.println("ERROR");
+                }
+            }
+
+            default -> out.println("ERROR");
         }
     }
 }

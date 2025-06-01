@@ -94,6 +94,35 @@ public class NetworkManager {
         return tasks;
     }
 
+    public static boolean changePassword(String newPassword) {
+        if (out != null && currentUser != null) {
+            try {
+                out.println("account|changePassword|" + currentUser + "|" + newPassword);
+                String response = in.readLine();
+                return "OK".equals(response);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return false;
+    }
+
+    public static boolean deleteAccount() {
+        if (out != null && currentUser != null) {
+            try {
+                out.println("account|delete|" + currentUser + "|-");
+                String response = in.readLine();
+                if ("OK".equals(response)) {
+                    currentUser = null;
+                    return true;
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return false;
+    }
+
     public static String getCurrentUser() {
         return currentUser;
     }

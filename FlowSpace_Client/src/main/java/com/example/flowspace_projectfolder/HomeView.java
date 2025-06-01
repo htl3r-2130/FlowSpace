@@ -43,6 +43,8 @@ public class HomeView extends Application {
         Button settingsBtn = new Button("Settings");
         Button profileBtn = new Button("Profile");
 
+        profileBtn.setOnAction(e -> AccountCenter.show(stage, stage));
+
         topBar.getChildren().addAll(searchField, searchButton, spacer, darkModeBtn, settingsBtn, profileBtn);
         topBar.setPadding(new Insets(30));
         topBar.setSpacing(10);
@@ -99,7 +101,7 @@ public class HomeView extends Application {
 
             CalendarDayCell cell = dateCellMap.get(date);
             if (cell != null) {
-                cell.loadEntry(text); // Neue Methode
+                cell.loadEntry(text);
             }
         }
 
