@@ -28,7 +28,7 @@ public class Login extends Application {
 
         VBox root = new VBox(15);
         root.setAlignment(Pos.CENTER);
-        root.setStyle("-fx-background-color: #eef2ff;");
+        root.setStyle("-fx-background-color: #d0ddff; -fx-padding: 20;");
         root.setPadding(new Insets(40));
 
         ImageView logo = new ImageView(new Image("file:resources/icon.png"));
@@ -47,9 +47,11 @@ public class Login extends Application {
         statusLabel.setStyle("-fx-text-fill: red;");
 
         Button loginButton = new Button("Login");
+        loginButton.setStyle("-fx-background-color: orange;" + "-fx-text-fill: white;" + "-fx-background-radius: 5;" + "-fx-border-radius: 5;");
         loginButton.setDefaultButton(true);
 
         Button signupButton = new Button("Noch kein Konto? Registrieren");
+        signupButton.setStyle("-fx-background-color: orange;" + "-fx-text-fill: white;" + "-fx-background-radius: 5;" + "-fx-border-radius: 5;");
 
         VBox formBox = new VBox(10);
         formBox.setAlignment(Pos.CENTER_LEFT);

@@ -19,7 +19,7 @@ public class AccountCenter {
 
         VBox root = new VBox(20);
         root.setPadding(new Insets(20));
-        root.setStyle("-fx-background-color: #eef2ff;");
+        root.setStyle("-fx-background-color: #d0ddff; -fx-padding: 20;");
 
         // --- Header ---
         HBox header = new HBox();
@@ -37,6 +37,7 @@ public class AccountCenter {
         usernameLabel.setAlignment(Pos.CENTER);
 
         Button logoutBtn = new Button("Logout");
+        logoutBtn.setStyle("-fx-background-color: orange;" + "-fx-text-fill: white;" + "-fx-background-radius: 5;" + "-fx-border-radius: 5;");
         logoutBtn.setOnAction(e -> {
             Login.clearStaySignedIn();
             NetworkManager.disconnect();
@@ -61,6 +62,7 @@ public class AccountCenter {
         statusLabel.setStyle("-fx-text-fill: red;");
 
         Button submitBtn = new Button("Passwort speichern");
+        submitBtn.setStyle("-fx-background-color: orange;" + "-fx-text-fill: white;" + "-fx-background-radius: 5;" + "-fx-border-radius: 5;");
         submitBtn.setOnAction(e -> {
             String pw = pwField.getText();
             String pwConfirm = pwConfirmField.getText();

@@ -19,13 +19,13 @@ public class Settings {
 
         VBox root = new VBox(15);
         root.setPadding(new Insets(20));
-        root.setStyle("-fx-background-color: #eef2ff;");
         root.setAlignment(Pos.CENTER);
+        root.setStyle("-fx-background-color: #d0ddff; -fx-padding: 20;");
 
         Label statusLabel = new Label();
 
-        // Config vom Server herunterladen
         Button downloadBtn = new Button("Config vom Server herunterladen");
+        downloadBtn.setStyle("-fx-background-color: orange;" + "-fx-text-fill: white;" + "-fx-background-radius: 5;" + "-fx-border-radius: 5;");
         downloadBtn.setOnAction(e -> {
             String configContent = NetworkManager.downloadConfig();
             if (configContent != null) {
@@ -45,8 +45,8 @@ public class Settings {
             }
         });
 
-        // Config zum Server hochladen
         Button uploadBtn = new Button("Config zum Server hochladen");
+        uploadBtn.setStyle("-fx-background-color: orange;" + "-fx-text-fill: white;" + "-fx-background-radius: 5;" + "-fx-border-radius: 5;");
         uploadBtn.setOnAction(e -> {
             FileChooser chooser = new FileChooser();
             chooser.setTitle("Config-Datei auswählen");

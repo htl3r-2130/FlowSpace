@@ -13,9 +13,8 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
-import javafx.scene.input.MouseEvent;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 public class HomeView extends Application {
@@ -33,36 +32,70 @@ public class HomeView extends Application {
         stage.getIcons().add(new Image("file:resources/icon.png"));
         stage.centerOnScreen();
 
-        // Root als StackPane für Overlay + Popup
         StackPane root = new StackPane();
 
-        // Hauptinhalt als BorderPane, wird in StackPane gelegt
         BorderPane mainPane = new BorderPane();
         root.getChildren().add(mainPane);
 
         // Top bar
         HBox topBar = new HBox();
-        Button searchButton = new Button("Search");
-        searchButton.setStyle(
-                "-fx-background-color: #d0ddff;" +    // blauer Hintergrund
-                        "-fx-text-fill: black;" +             // Textfarbe schwarz (oder weiß, je nach Wunsch)
-                        "-fx-font-size: 16px;" +              // größere Schrift
-                        "-fx-font-weight: bold;" +            // fett
-                        "-fx-padding: 8 20 8 20;" +           // größerer Padding (oben, rechts, unten, links)
-                        "-fx-background-radius: 5;"           // abgerundete Ecken
-        );
-
         Region spacer = new Region();
         HBox.setHgrow(spacer, Priority.ALWAYS);
 
-        Button darkModeBtn = new Button("Darkmode");
-        Button settingsBtn = new Button("Settings");
-        Button profileBtn = new Button("Profile");
+        Image searchButtonImage = new Image("file:resources/search.png");
+        ImageView searchButtonImageView = new ImageView(searchButtonImage);
+        searchButtonImageView.setFitWidth(32);
+        searchButtonImageView.setFitHeight(32);
+        searchButtonImageView.setPreserveRatio(true);
+        Button searchButton = new Button();
+        searchButton.setGraphic(searchButtonImageView);
 
-        profileBtn.setOnAction(e -> AccountCenter.show(stage, stage));
+        Image settingsButtonImage = new Image("file:resources/settings.png");
+        ImageView settingsButtonImageView = new ImageView(settingsButtonImage);
+        settingsButtonImageView.setFitWidth(32);
+        settingsButtonImageView.setFitHeight(32);
+        settingsButtonImageView.setPreserveRatio(true);
+        Button settingsBtn = new Button();
+        settingsBtn.setGraphic(settingsButtonImageView);
+
+        Image accountButtonImage = new Image("file:resources/user.png");
+        ImageView accountImageView = new ImageView(accountButtonImage);
+        accountImageView.setFitWidth(32);
+        accountImageView.setFitHeight(32);
+        accountImageView.setPreserveRatio(true);
+        Button accountBtn = new Button();
+        accountBtn.setGraphic(accountImageView);
+
+        searchButton.setStyle(
+                "-fx-background-color: #d0ddff;" +
+                        "-fx-text-fill: black;" +
+                        "-fx-font-size: 16px;" +
+                        "-fx-font-weight: bold;" +
+                        "-fx-padding: 8 20 8 20;" +
+                        "-fx-background-radius: 50;"
+        );
+        settingsBtn.setStyle(
+                "-fx-background-color: #d0ddff;" +
+                        "-fx-text-fill: black;" +
+                        "-fx-font-size: 16px;" +
+                        "-fx-font-weight: bold;" +
+                        "-fx-padding: 8 20 8 20;" +
+                        "-fx-background-radius: 50;"
+        );
+        accountBtn.setStyle(
+                "-fx-background-color: #d0ddff;" +
+                        "-fx-text-fill: black;" +
+                        "-fx-font-size: 16px;" +
+                        "-fx-font-weight: bold;" +
+                        "-fx-padding: 8 20 8 20;" +
+                        "-fx-background-radius: 50;"
+        );
+
+
+        accountBtn.setOnAction(e -> AccountCenter.show(stage, stage));
         settingsBtn.setOnAction(f -> Settings.show(stage, stage));
 
-        topBar.getChildren().addAll(searchButton, spacer, darkModeBtn, settingsBtn, profileBtn);
+        topBar.getChildren().addAll(searchButton, spacer, settingsBtn, accountBtn);
         topBar.setPadding(new Insets(30));
         topBar.setSpacing(10);
         mainPane.setTop(topBar);

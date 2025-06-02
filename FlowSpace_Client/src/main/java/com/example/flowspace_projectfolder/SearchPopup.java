@@ -61,11 +61,9 @@ public class SearchPopup {
 
         root.getChildren().addAll(overlay, popup);
 
-        // Schließen: Overlay oder Schließen-Button
         closeBtn.setOnAction(e -> hide());
         overlay.addEventFilter(MouseEvent.MOUSE_CLICKED, e -> hide());
 
-        // Suchen-Button klick
         searchBtn.setOnAction(e -> {
             String input = searchField.getText();
             List<String> matches = searchTasksWithRegex(input);
@@ -74,12 +72,7 @@ public class SearchPopup {
     }
 
     private void styleOrangeButton(Button btn) {
-        btn.setStyle(
-                "-fx-background-color: orange;" +
-                        "-fx-text-fill: white;" +
-                        "-fx-background-radius: 5;" +
-                        "-fx-border-radius: 5;"
-        );
+        btn.setStyle("-fx-background-color: orange;" + "-fx-text-fill: white;" + "-fx-background-radius: 5;" + "-fx-border-radius: 5;");
     }
 
     public void show() {
@@ -106,7 +99,6 @@ public class SearchPopup {
                 String name = parts[1].replace("[", "").replace("]", "").trim();
 
                 if (name.matches(".*" + regex + ".*")) {
-                    // Datum-Format: JJJJ-MM-TT → TT.MM.JJJJ
                     String[] dateParts = date.split("-");
                     String formattedDate = dateParts[2] + "." + dateParts[1] + "." + dateParts[0];
                     String output = " " + name + " ist am " + formattedDate + " zu erledigen";

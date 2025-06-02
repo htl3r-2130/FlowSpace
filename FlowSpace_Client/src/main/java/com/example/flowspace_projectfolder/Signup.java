@@ -19,6 +19,7 @@ public class Signup {
         VBox root = new VBox(10);
         root.setAlignment(Pos.CENTER_LEFT);
         root.setPadding(new Insets(20));
+        root.setStyle("-fx-background-color: #d0ddff; -fx-padding: 20;");
 
         TextField userField = new TextField();
         PasswordField pwField = new PasswordField();
@@ -28,6 +29,7 @@ public class Signup {
         statusLabel.setStyle("-fx-text-fill: red;");
 
         Button registerButton = new Button("Registrieren");
+        registerButton.setStyle("-fx-background-color: orange;" + "-fx-text-fill: white;" + "-fx-background-radius: 5;" + "-fx-border-radius: 5;");
 
         registerButton.setOnAction(e -> {
             String user = userField.getText();
