@@ -133,7 +133,14 @@ public class Login extends Application {
     //Deletes STAY_SIGNED_IN_FILE
     public static void clearStaySignedIn() {
         if (STAY_SIGNED_IN_FILE.exists()) {
-            STAY_SIGNED_IN_FILE.delete();
+            try {
+                if (!STAY_SIGNED_IN_FILE.delete()) {
+                    throw new IOException("Datei konnte nicht gelöscht werden: " + STAY_SIGNED_IN_FILE.getAbsolutePath());
+                }
+            } catch (Exception e) {
+                System.err.println("Fehler beim Löschen der Datei: " + e.getMessage());
+                e.printStackTrace();
+            }
         }
     }
 
