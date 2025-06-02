@@ -18,6 +18,7 @@ public class NetworkManager {
     private static PrintWriter out;
     private static BufferedReader in;
 
+    //Connects to server
     public static boolean connect() {
         try {
             socket = new Socket(SERVER_ADDRESS, PORT);
@@ -30,6 +31,7 @@ public class NetworkManager {
         }
     }
 
+    //Trys to get a validation with given username & password
     public static boolean login(String username, String password) {
         try {
             out.println("login|" + username + "|" + password);
@@ -44,6 +46,7 @@ public class NetworkManager {
         return false;
     }
 
+    //Closes the connection
     public static void disconnect() {
         try {
             if (socket != null) socket.close();
@@ -51,6 +54,7 @@ public class NetworkManager {
         }
     }
 
+    //Sends task with format : task|add|user|YYYY-MM-DD|text
     public static void sendTask(String formattedTaskText) {
         if (out != null && currentUser != null) {
             out.println("task|add|" + currentUser + "|" + formattedTaskText);
@@ -59,6 +63,7 @@ public class NetworkManager {
         }
     }
 
+    //Deletes task with format : task|delete|user|YYYY-MM-DD|text
     public static void deleteTask(String formattedTaskText) {
         if (out != null && currentUser != null) {
             out.println("task|delete|" + currentUser + "|" + formattedTaskText);
@@ -67,6 +72,7 @@ public class NetworkManager {
         }
     }
 
+    //Attempts signup with given parameters and checks if user already exists
     public static boolean signup(String username, String password) {
         if (!connect()) return false;
         try {
@@ -79,6 +85,7 @@ public class NetworkManager {
         }
     }
 
+    //Returns all tasks for current user with a list
     public static List<String> loadUserTasks() {
         List<String> tasks = new ArrayList<>();
         if (out != null && currentUser != null) {
@@ -95,6 +102,7 @@ public class NetworkManager {
         return tasks;
     }
 
+    //Attempts password change for current user
     public static boolean changePassword(String newPassword) {
         if (out != null && currentUser != null) {
             try {
@@ -108,6 +116,7 @@ public class NetworkManager {
         return false;
     }
 
+    //Attempts deletion of current user
     public static boolean deleteAccount() {
         if (out != null && currentUser != null) {
             try {
@@ -124,6 +133,7 @@ public class NetworkManager {
         return false;
     }
 
+    //Attempts to retrieve config file of current user
     public static String downloadConfig() {
         if (out != null && currentUser != null) {
             try {
@@ -141,6 +151,7 @@ public class NetworkManager {
         return null;
     }
 
+    //Attempts to upload new config file for current user
     public static boolean uploadConfig(String content) {
         if (out != null && currentUser != null) {
             try {

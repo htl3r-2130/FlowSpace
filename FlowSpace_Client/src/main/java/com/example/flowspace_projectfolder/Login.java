@@ -15,7 +15,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 
 public class Login extends Application {
-    private CheckBox staySignedInBox = new CheckBox("Angemeldet bleiben");
     private static final File STAY_SIGNED_IN_FILE = new File("staySignedIn.txt");
 
     @Override
@@ -60,6 +59,7 @@ public class Login extends Application {
         HBox validationBox = new HBox(10);
         validationBox.getChildren().addAll(signupButton, loginButton);
 
+        CheckBox staySignedInBox = new CheckBox("Angemeldet bleiben");
         formBox.getChildren().addAll(userLabel, usernameField, pwLabel, passwordField, staySignedInBox, validationBox, statusLabel);
         root.getChildren().addAll(logo, formBox);
         Scene scene = new Scene(root);
@@ -99,6 +99,7 @@ public class Login extends Application {
         signupButton.setOnAction(f -> Signup.show(stage));
     }
 
+    //Checks if STAY_SIGNED_IN_FILE exists and trys to log user in with data in file
     private void tryAutoLogin(Stage stage) {
         if (STAY_SIGNED_IN_FILE.exists()) {
             try {
@@ -118,6 +119,7 @@ public class Login extends Application {
         }
     }
 
+    //Redirect to given stage
     private void openHome(Stage loginStage) {
         try {
             HomeView home = new HomeView();
@@ -128,6 +130,7 @@ public class Login extends Application {
         }
     }
 
+    //Deletes STAY_SIGNED_IN_FILE
     public static void clearStaySignedIn() {
         if (STAY_SIGNED_IN_FILE.exists()) {
             STAY_SIGNED_IN_FILE.delete();
