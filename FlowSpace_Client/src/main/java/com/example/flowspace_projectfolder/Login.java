@@ -60,23 +60,14 @@ public class Login extends Application {
         HBox validationBox = new HBox(10);
         validationBox.getChildren().addAll(signupButton, loginButton);
 
-        formBox.getChildren().addAll(
-                userLabel, usernameField,
-                pwLabel, passwordField,
-                staySignedInBox,
-                validationBox, statusLabel
-        );
-
+        formBox.getChildren().addAll(userLabel, usernameField, pwLabel, passwordField, staySignedInBox, validationBox, statusLabel);
         root.getChildren().addAll(logo, formBox);
-
         Scene scene = new Scene(root);
         stage.setScene(scene);
         stage.show();
 
-        // Automatischer Login
         tryAutoLogin(stage);
 
-        // Login Button handler
         loginButton.setOnAction(e -> {
             String user = usernameField.getText();
             String pw = passwordField.getText();

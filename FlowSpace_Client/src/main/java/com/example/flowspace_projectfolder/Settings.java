@@ -5,11 +5,11 @@ import javafx.scene.*;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.geometry.*;
+
 import java.io.*;
 import java.nio.file.*;
 
 public class Settings {
-
     public static void show(Stage owner, Stage parentStage) {
         Stage dialog = new Stage();
         dialog.setTitle("Einstellungen");
@@ -26,6 +26,7 @@ public class Settings {
 
         Button downloadBtn = new Button("Config vom Server herunterladen");
         downloadBtn.setStyle("-fx-background-color: orange;" + "-fx-text-fill: white;" + "-fx-background-radius: 5;" + "-fx-border-radius: 5;");
+
         downloadBtn.setOnAction(e -> {
             String configContent = NetworkManager.downloadConfig();
             if (configContent != null) {
@@ -47,6 +48,7 @@ public class Settings {
 
         Button uploadBtn = new Button("Config zum Server hochladen");
         uploadBtn.setStyle("-fx-background-color: orange;" + "-fx-text-fill: white;" + "-fx-background-radius: 5;" + "-fx-border-radius: 5;");
+
         uploadBtn.setOnAction(e -> {
             FileChooser chooser = new FileChooser();
             chooser.setTitle("Config-Datei auswählen");
@@ -62,8 +64,7 @@ public class Settings {
                         parentStage.close();
                         Stage loginStage = new Stage();
                         new Login().start(loginStage);
-                    }
-                    else {
+                    } else {
                         statusLabel.setText("Fehler beim Speichern.");
                     }
                 } catch (IOException ex) {
@@ -71,7 +72,6 @@ public class Settings {
                 }
             }
         });
-
         root.getChildren().addAll(downloadBtn, uploadBtn, statusLabel);
         Scene scene = new Scene(root, 400, 200);
         dialog.setScene(scene);

@@ -18,12 +18,8 @@ import javafx.scene.layout.*;
 import javafx.stage.Stage;
 
 public class HomeView extends Application {
-
     Map<LocalDate, CalendarDayCell> dateCellMap = new HashMap<>();
-    public static final String[] months = new String[]{"",
-            "Jänner", "Februar", "März", "April", "Mai", "Juni",
-            "Juli", "August", "September", "Oktober", "November", "Dezember"
-    };
+    public static final String[] months = new String[]{"", "Jänner", "Februar", "März", "April", "Mai", "Juni", "Juli", "August", "September", "Oktober", "November", "Dezember"};
 
     @Override
     public void start(Stage stage) {
@@ -33,11 +29,9 @@ public class HomeView extends Application {
         stage.centerOnScreen();
 
         StackPane root = new StackPane();
-
         BorderPane mainPane = new BorderPane();
         root.getChildren().add(mainPane);
 
-        // Top bar
         HBox topBar = new HBox();
         Region spacer = new Region();
         HBox.setHgrow(spacer, Priority.ALWAYS);
@@ -91,7 +85,6 @@ public class HomeView extends Application {
                         "-fx-background-radius: 50;"
         );
 
-
         accountBtn.setOnAction(e -> AccountCenter.show(stage, stage));
         settingsBtn.setOnAction(f -> Settings.show(stage, stage));
 
@@ -100,7 +93,6 @@ public class HomeView extends Application {
         topBar.setSpacing(10);
         mainPane.setTop(topBar);
 
-        // Kalender grid
         GridPane calendarGrid = new GridPane();
         calendarGrid.setHgap(6);
         calendarGrid.setVgap(6);
@@ -110,7 +102,6 @@ public class HomeView extends Application {
         LocalDate today = LocalDate.now();
         LocalDate start = today.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
         LocalDate end = LocalDate.of(today.getYear(), 12, 31); //Grid-Länge
-
         int row = 0;
         int col = 0;
         for (LocalDate date = start; !date.isAfter(end); date = date.plusDays(1)) {
@@ -137,18 +128,14 @@ public class HomeView extends Application {
         ScrollPane scrollPane = new ScrollPane(calendarGrid);
         scrollPane.setFitToWidth(true);
         scrollPane.setPadding(new Insets(10));
-
         mainPane.setCenter(scrollPane);
 
-        // Popup erzeugen
         SearchPopup popup = new SearchPopup(root);
 
-        // Search Button öffnet Popup
         searchButton.setOnAction(e -> {
             popup.show();
         });
 
-        // Falls du Tasks lädst (deine Logik)
         List<String> tasks = NetworkManager.loadUserTasks();
         for (String entry : tasks) {
             String[] parts = entry.split("\\|", 2);
@@ -161,7 +148,6 @@ public class HomeView extends Application {
                 cell.loadEntry(text);
             }
         }
-
         Scene scene = new Scene(root);
         stage.setScene(scene);
         stage.show();

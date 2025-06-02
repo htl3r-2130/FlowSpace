@@ -28,6 +28,7 @@ public class CalenderEntry extends HBox {
         ContextMenu contextMenu = new ContextMenu();
 
         MenuItem editItem = new MenuItem("Bearbeiten");
+
         editItem.setOnAction(e -> {
             Stage popupStage = new Stage();
             popupStage.initModality(Modality.WINDOW_MODAL);
@@ -62,7 +63,6 @@ public class CalenderEntry extends HBox {
                 }
                 popupStage.close();
             });
-
             cancelButton.setOnAction(ev -> popupStage.close());
 
             HBox buttons = new HBox(10, okButton, cancelButton);
@@ -88,7 +88,6 @@ public class CalenderEntry extends HBox {
         });
 
         contextMenu.getItems().addAll(editItem, deleteItem);
-
         setOnMouseClicked(event -> {
             if (event.getButton() == MouseButton.SECONDARY) {
                 contextMenu.show(this, event.getScreenX(), event.getScreenY());

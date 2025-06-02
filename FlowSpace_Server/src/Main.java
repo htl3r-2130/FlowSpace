@@ -11,7 +11,6 @@ public class Main {
     public static void main(String[] args) {
         loadUsers();
         System.out.println("- Server started on port: " + PORT);
-
         try (ServerSocket serverSocket = new ServerSocket(PORT)) {
             while (true) {
                 Socket socket = serverSocket.accept();
@@ -82,10 +81,8 @@ public class Main {
             out.println("ERROR");
             return;
         }
-
         String username = parts[1];
         String password = parts[2];
-
         System.out.println("- Login attempt from '" + username + "'");
 
         String storedPassword = users.get(username);
@@ -161,7 +158,7 @@ public class Main {
                     try (BufferedReader reader = new BufferedReader(new FileReader(userFile))) {
                         String line;
                         while ((line = reader.readLine()) != null) {
-                            out.println(line); // Send: YYYY-MM-DD|Task text
+                            out.println(line);
                         }
                     } catch (IOException e) {
                         throw new RuntimeException(e);
@@ -215,7 +212,6 @@ public class Main {
             out.println("ERROR");
             return;
         }
-
         String action = parts[1];
         String username = parts[2];
 

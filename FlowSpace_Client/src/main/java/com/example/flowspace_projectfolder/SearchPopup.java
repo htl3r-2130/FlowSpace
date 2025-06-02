@@ -13,15 +13,12 @@ import javafx.scene.layout.VBox;
 import java.util.List;
 
 public class SearchPopup {
-
     private final Pane overlay;
     private final VBox popup;
-
     private final TextField searchField;
     private final ListView<String> resultList;
 
     public SearchPopup(StackPane root) {
-
         overlay = new Pane();
         overlay.setStyle("-fx-background-color: rgba(0, 0, 0, 0.7);");
         overlay.setVisible(false);
@@ -35,44 +32,35 @@ public class SearchPopup {
         popup.setMinSize(350, 400);
         popup.setVisible(false);
 
-        // Suchfeld und Suchbutton
         searchField = new TextField();
         searchField.setPromptText("Suche...");
         searchField.setStyle("-fx-background-radius: 5; -fx-border-radius: 5;");
 
         Button searchBtn = new Button("Suchen");
-        styleOrangeButton(searchBtn);
+        searchBtn.setStyle("-fx-background-color: orange;" + "-fx-text-fill: white;" + "-fx-background-radius: 5;" + "-fx-border-radius: 5;");
+
+        Button closeBtn = new Button("Schließen");
+        closeBtn.setStyle("-fx-background-color: orange;" + "-fx-text-fill: white;" + "-fx-background-radius: 5;" + "-fx-border-radius: 5;");
 
         HBox searchBox = new HBox(10, searchField, searchBtn);
         searchBox.setAlignment(Pos.CENTER_LEFT);
-
-        // Ergebnisliste
         resultList = new ListView<>();
         resultList.setPrefHeight(250);
-
-        // Schließen-Button
-        Button closeBtn = new Button("Schließen");
-        styleOrangeButton(closeBtn);
 
         popup.getChildren().addAll(searchBox, resultList, closeBtn);
         popup.setAlignment(Pos.TOP_CENTER);
 
         StackPane.setAlignment(popup, Pos.CENTER);
-
         root.getChildren().addAll(overlay, popup);
-
-        closeBtn.setOnAction(e -> hide());
-        overlay.addEventFilter(MouseEvent.MOUSE_CLICKED, e -> hide());
 
         searchBtn.setOnAction(e -> {
             String input = searchField.getText();
             List<String> matches = searchTasksWithRegex(input);
             resultList.getItems().setAll(matches);
         });
-    }
 
-    private void styleOrangeButton(Button btn) {
-        btn.setStyle("-fx-background-color: orange;" + "-fx-text-fill: white;" + "-fx-background-radius: 5;" + "-fx-border-radius: 5;");
+        closeBtn.setOnAction(e -> hide());
+        overlay.addEventFilter(MouseEvent.MOUSE_CLICKED, e -> hide());
     }
 
     public void show() {
@@ -87,17 +75,14 @@ public class SearchPopup {
         popup.setVisible(false);
     }
 
-
     private List<String> searchTasksWithRegex(String regex) {
         String[] everyTask = String.valueOf(NetworkManager.loadUserTasks()).split(",");
         List<String> matches = new java.util.ArrayList<>();
-
         for (String task : everyTask) {
             String[] parts = task.split("\\|", 2);
             if (parts.length == 2) {
                 String date = parts[0].replace("[", "").replace("]", "").trim();
                 String name = parts[1].replace("[", "").replace("]", "").trim();
-
                 if (name.matches(".*" + regex + ".*")) {
                     String[] dateParts = date.split("-");
                     String formattedDate = dateParts[2] + "." + dateParts[1] + "." + dateParts[0];
@@ -106,12 +91,9 @@ public class SearchPopup {
                 }
             }
         }
-
         if (matches.isEmpty()) {
             matches.add("Keine Treffer gefunden.");
         }
-
         return matches;
     }
-
 }

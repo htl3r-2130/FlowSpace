@@ -13,6 +13,7 @@ import javafx.stage.Stage;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+
 import static com.example.flowspace_projectfolder.HomeView.months;
 
 public class CalendarDayCell extends StackPane {
@@ -22,7 +23,7 @@ public class CalendarDayCell extends StackPane {
     private final int month;
     private final int year;
 
-    public CalendarDayCell(int day,int month, int year, boolean isToday, Stage stage) {
+    public CalendarDayCell(int day, int month, int year, boolean isToday, Stage stage) {
         this.day = day;
         this.month = month;
         this.year = year;
@@ -30,13 +31,11 @@ public class CalendarDayCell extends StackPane {
         Region background = new Region();
         background.setPrefSize(200, 200);
         background.setStyle("-fx-background-color: #d0ddff;");
-
         Label dayLabel = new Label(String.valueOf(day));
         dayLabel.setPadding(new Insets(10));
         StackPane.setAlignment(dayLabel, Pos.TOP_RIGHT);
         entryBox.setSpacing(5);
         entryBox.setPadding(new Insets(35, 5, 5, 5));
-
         if (isToday) {
             Circle redCircle = new Circle(12);
             redCircle.setFill(Color.RED);
@@ -47,7 +46,6 @@ public class CalendarDayCell extends StackPane {
         } else {
             this.getChildren().addAll(background, dayLabel, entryBox);
         }
-
         this.setOnMouseClicked(e -> promptNewEntry(stage));
     }
 
@@ -83,7 +81,6 @@ public class CalendarDayCell extends StackPane {
 
         HBox buttons = new HBox(10, okButton, cancelButton);
         buttons.setAlignment(Pos.CENTER);
-
         VBox layout = new VBox(15, header, inputField, buttons);
         layout.setAlignment(Pos.CENTER);
         layout.setStyle("-fx-background-color: #d0ddff; -fx-background-radius: 10; -fx-padding: 20;");

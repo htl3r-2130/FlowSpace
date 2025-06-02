@@ -14,7 +14,6 @@ public class NetworkManager {
     private static final String SERVER_ADDRESS = "localhost";
     private static final int PORT = 12345;
     private static String currentUser = null;
-
     private static Socket socket;
     private static PrintWriter out;
     private static BufferedReader in;
@@ -48,7 +47,8 @@ public class NetworkManager {
     public static void disconnect() {
         try {
             if (socket != null) socket.close();
-        } catch (IOException ignored) {}
+        } catch (IOException ignored) {
+        }
     }
 
     public static void sendTask(String formattedTaskText) {

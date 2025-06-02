@@ -35,7 +35,6 @@ public class Signup {
             String user = userField.getText();
             String pw = pwField.getText();
             String pwConfirm = pwConfirmField.getText();
-
             if (user.isEmpty() || pw.isEmpty() || pwConfirm.isEmpty()) {
                 statusLabel.setText("Alle Felder ausfüllen.");
             } else if (!pw.equals(pwConfirm)) {
@@ -46,7 +45,6 @@ public class Signup {
                     statusLabel.setText("Serververbindung fehlgeschlagen.");
                     return;
                 }
-
                 boolean success = NetworkManager.signup(user, pw);
                 if (success) {
                     Alert alert = new Alert(Alert.AlertType.INFORMATION);

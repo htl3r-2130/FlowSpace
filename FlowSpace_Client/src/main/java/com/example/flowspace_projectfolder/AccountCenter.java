@@ -21,7 +21,6 @@ public class AccountCenter {
         root.setPadding(new Insets(20));
         root.setStyle("-fx-background-color: #d0ddff; -fx-padding: 20;");
 
-        // --- Header ---
         HBox header = new HBox();
         header.setAlignment(Pos.CENTER_LEFT);
         header.setSpacing(20);
@@ -63,6 +62,7 @@ public class AccountCenter {
 
         Button submitBtn = new Button("Passwort speichern");
         submitBtn.setStyle("-fx-background-color: orange;" + "-fx-text-fill: white;" + "-fx-background-radius: 5;" + "-fx-border-radius: 5;");
+
         submitBtn.setOnAction(e -> {
             String pw = pwField.getText();
             String pwConfirm = pwConfirmField.getText();
@@ -82,6 +82,7 @@ public class AccountCenter {
 
         Button deleteBtn = new Button("Account löschen");
         deleteBtn.setStyle("-fx-background-color: red; -fx-text-fill: white;");
+
         deleteBtn.setOnAction(e -> {
             boolean confirmed = new Alert(Alert.AlertType.CONFIRMATION, "Wirklich löschen?", ButtonType.YES, ButtonType.NO)
                     .showAndWait().orElse(ButtonType.NO) == ButtonType.YES;
@@ -99,10 +100,8 @@ public class AccountCenter {
                 }
             }
         });
-
         VBox pwBox = new VBox(10, changePwLabel, pwField, pwConfirmField, submitBtn);
         root.getChildren().addAll(header, pwBox, statusLabel, deleteBtn);
-
         Scene scene = new Scene(root, 400, 300);
         dialog.setScene(scene);
         dialog.show();
